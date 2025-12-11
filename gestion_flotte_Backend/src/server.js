@@ -2,7 +2,8 @@ import express from "express";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import ErrorHandler from "./middleware/errorHandler.js";
-import authRoute from "./routes/authRoute.js";
+import allRoutes from "./routes/index.js";
+import "./config/mail.js";
 
 dotenv.config();
 connectDB();
@@ -16,11 +17,11 @@ app.get("/", (req, res)=>{
 
 const PORT = process.env.PORT || 3000;
 
+app.use("/api", allRoutes);
+
 app.listen(process.env.PORT, ()=>{
     console.log(`Server running on port ${PORT}`);
 });
-
-app.use("/api/auth", authRoute);
 
 app.use(ErrorHandler);
 

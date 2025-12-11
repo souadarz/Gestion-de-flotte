@@ -17,10 +17,9 @@ export const createCamion = async (req, res, next) => {
     });
 
     if (camionExistant) {
-      return res.status(400).json({
-        success: false,
-        message: "un camion avec cette immatriculation existe deja",
-      });
+      const err = new Error("Un camion avec cette immatriculation existe déjà");
+      err.statusCode = 400;
+      throw err;
     }
 
     const camion = await Camion.create({
@@ -77,10 +76,9 @@ export const getCamionById = async (req, res, next) => {
     const camion = await Camion.findById(req.params.id);
 
     if (!camion) {
-      return res.status(404).Json({
-        success: false,
-        message: "camion non trouvé",
-      });
+      const err = new Error("Camion non trouvé");
+      err.statusCode = 404;
+      throw err;
     }
 
     res.status(200).json({
@@ -98,18 +96,16 @@ export const updateCamion = async (req, res, next) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    const camion = await Camion.findById(id);
-    if (!camion) {
-      return res.status(404).json({
-        success: false,
-        message: "Camion non trouvé",
-      });
-    }
-
     const updatedCamion = await Camion.findByIdAndUpdate(id, updateData, {
       new: true,
-      runValidators: true, 
+      runValidators: true,
     });
+
+    if (!updatedCamion) {
+      const err = new Error("Camion non trouvé");
+      err.statusCode = 404;
+      throw err;
+    }
 
     res.status(200).json({
       success: true,
@@ -125,15 +121,13 @@ export const deleteCamion = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const camion = await Camion.findById(id);
-    if (!camion) {
-      return res.status(404).json({
-        success: false,
-        message: "Camion non trouvé",
-      });
-    }
-
     const deletedCamion = await Camion.findByIdAndDelete(id);
+
+    if (!deletedCamion) {
+      const err = new Error("Camion non trouvé");
+      err.statusCode = 404;
+      throw err;
+    }
 
     res.status(200).json({
       success: true,

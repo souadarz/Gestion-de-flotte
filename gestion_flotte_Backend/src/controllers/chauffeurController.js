@@ -10,10 +10,9 @@ export const createChauffeur = async (req, res, next) => {
 
     const chauffeurExistant = await User.findOne({ email });
     if (chauffeurExistant) {
-      return res.status(400).json({
-        success: false,
-        message: "Un chauffeur avec cet email existe deja",
-      });
+      const err = new Error("Un chauffeur avec cet email existe déjà");
+      err.statusCode = 400;
+      throw err;
     }
 
     const chauffeur = await User.create({
@@ -26,7 +25,13 @@ export const createChauffeur = async (req, res, next) => {
     await sendMail({
       to: chauffeur.email,
       subject: "Votre compte chauffeur",
-      text: "zertyuio",
+      text: `
+        Bonjour ${chauffeur.nom}, Votre compte chauffeur a été créé.
+        Identifiants :
+          - Email : ${chauffeur.email}
+          - Mot de passe : ${password}
+        Merci de changer votre mot de passe après connexion.
+      `,
       html: `
         <h3>Bonjour ${chauffeur.nom},</h3>
         <p>Votre compte chauffeur a été créé.</p>
@@ -89,11 +94,11 @@ export const getChauffeurById = async (req, res, next) => {
   try {
     const chauffeur = await User.findById(req.params.id).select("-motDePasse");
 
+   
     if (!chauffeur) {
-      return res.status(404).Json({
-        success: false,
-        message: "Chauffeur non trouvé",
-      });
+      const err = new Error("Chauffeur non trouvé");
+      err.statusCode = 404;
+      throw err;
     }
 
     res.status(200).json({

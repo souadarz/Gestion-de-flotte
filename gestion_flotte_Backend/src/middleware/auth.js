@@ -1,9 +1,10 @@
-import User from "../models/User";
+import User from "../models/User.js";
+import jwt from "jsonwebtoken";
 
 export const authenticate = async (req, res, next) => {
   try {
     const token =
-      req.header("Authorization")?.replace("Bearer ", "");
+      req.header("authorization")?.replace("Bearer ", "");
 
     if (!token) {
       return res.status(401).json({
@@ -16,7 +17,7 @@ export const authenticate = async (req, res, next) => {
 
     if (!user) {
       return res.status(401).json({
-        message: "Token invalide.",
+         message: "Utilisateur non trouvé"
       });
     }
 
@@ -29,7 +30,7 @@ export const authenticate = async (req, res, next) => {
   }
 };
 
-export const roleMiddleware = (roles) => {
+export const roleMiddleware = (...roles) => {
   return (req, res, next) => {
     const user = req.user;
 

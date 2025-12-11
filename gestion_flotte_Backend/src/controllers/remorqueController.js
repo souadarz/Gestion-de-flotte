@@ -9,10 +9,9 @@ export const createRemorque = async (req, res, next) => {
     });
 
     if (remorqueExistant) {
-      return res.status(400).json({
-        success: false,
-        message: "un remorque avec cette immatriculation existe deja",
-      });
+      const err = new Error("un remorque avec cette immatriculation existe deja");
+      err.statusCode = 404;
+      throw err;
     }
 
     const remorque = await Remorque.create({
@@ -66,10 +65,9 @@ export const getRemorqueById = async (req, res, next) => {
     const remorque = await Remorque.findById(req.params.id);
 
     if (!remorque) {
-      return res.status(404).Json({
-        success: false,
-        message: "remorque non trouvé",
-      });
+      const err = new Error("remorque non trouvé");
+      err.statusCode = 404;
+      throw err;
     }
 
     res.status(200).json({
@@ -87,18 +85,16 @@ export const updateRemorque = async (req, res, next) => {
     const { id } = req.params;
     const updateData = req.body;
 
-    const remorque = await Remorque.findById(id);
-    if (!remorque) {
-      return res.status(404).json({
-        success: false,
-        message: "remorque non trouvé",
-      });
-    }
-
     const updatedRemorque = await Remorque.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
     });
+
+    if (!updateRemorque) {
+      const err = new Error("remorque non trouvé");
+      err.statusCode = 404;
+      throw err;
+    }
 
     res.status(200).json({
       success: true,
@@ -114,15 +110,13 @@ export const deleteRemorque = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const remorque = await Remorque.findById(id);
-    if (!remorque) {
-      return res.status(404).json({
-        success: false,
-        message: "remorque non trouvé",
-      });
-    }
+    const deletedRemorque = await Remorque.findByIdAndDelete(id);
 
-    const deletedremorque = await Remorque.findByIdAndDelete(id);
+    if (!deletedRemorque) {
+      const err = new Error("remorque non trouvé");
+      err.statusCode = 404;
+      throw err;
+    }
 
     res.status(200).json({
       success: true,

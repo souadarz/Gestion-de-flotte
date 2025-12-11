@@ -111,7 +111,9 @@ export const getTrajetsChauffeur = async (req, res, next) => {
 
 export const getTrajetById = async (req, res, next) => {
   try {
-    const trajet = await Trajet.findById(req.params.id)
+    const { id } = req.params;
+
+    const trajet = await Trajet.findById(id)
       .populate("chauffeurId", "nom email")
       .populate("camionId", "immatriculation marque modele")
       .populate("remorqueId", "immatriculation type");
@@ -122,9 +124,21 @@ export const getTrajetById = async (req, res, next) => {
       throw err;
     }
 
+    const user = req.user;
+    if (
+      user.role === "chauffeur" &&
+      trajet.chauffeurId._id.toString() !== user.id
+    ) {
+      const err = new Error(
+        "Accès refusé : vous ne pouvez consulter que vos trajets"
+      );
+      err.statusCode = 403;
+      throw err;
+    }
+
     res.status(200).json({
       success: true,
-      message: "trajet récupéré avec succès",
+      message: "Trajet récupéré avec succès",
       data: trajet,
     });
   } catch (error) {
@@ -132,6 +146,7 @@ export const getTrajetById = async (req, res, next) => {
   }
 };
 
+//la mise à jours du trajet par le chauffeur
 export const updateTrajetChauffeur = async (req, res, next) => {
   try {
     const trajet = await Trajet.findById(req.params.id);
@@ -204,7 +219,7 @@ export const updateTrajetChauffeur = async (req, res, next) => {
 //       message: "trajet mis à jour avec succès",
 //       data: updatedtrajet,
 //     });
-//   } catch (error) {
+//   } catch (error) {            
 //     next(error);
 //   }
 // };
