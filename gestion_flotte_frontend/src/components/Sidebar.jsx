@@ -7,8 +7,10 @@ import {
 } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const Sidebar = () => {
+  const {user} = useAuth();
   return (
     <div className="w-64 bg-[#002D74] text-white flex flex-col">
       <div className="p-6 text-2xl font-bold border-b border-blue-800">
@@ -16,22 +18,26 @@ const Sidebar = () => {
       </div>
       <nav className="flex-1 p-4">
         <ul>
-          <li className="mb-2">
-            <Link
-              to="/adminDashboard"
-              className="flex items-center p-3 rounded-lg bg-[#206ab1] font-semibold"
-            >
-              <FaRoute className="mr-3" /> Tableau de Bord
-            </Link>
-          </li>
-          <li className="mb-2">
-            <Link
-              to="/camions"
-              className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
-            >
-              <FaTruck className="mr-3" /> Gestion des camions
-            </Link>
-          </li>
+          {user?.role === "admin" && (
+            <>
+              <li className="mb-2">
+                <Link
+                  to="/adminDashboard"
+                  className="flex items-center p-3 rounded-lg bg-[#206ab1] font-semibold"
+                >
+                  <FaRoute className="mr-3" /> Tableau de Bord
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/camions"
+                  className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
+                >
+                  <FaTruck className="mr-3" /> Gestion des camions
+                </Link>
+              </li>
+            </>
+          )}
           <li className="mb-2">
             <Link
               to=""

@@ -8,8 +8,9 @@ export const login = createAsyncThunk(
       const res = await api.post("/auth/login", { email, motDePasse });
 
       const { token, data } = res.data;
-      console.log("logiiiin", res.data);
-      localStorage.setItem("token", res.data);
+      // console.log("logiiiin", res.data);
+      // console.log("logiiiin", res.data.token);
+      localStorage.setItem("token", res.data.token);
       return { token, user: data };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
