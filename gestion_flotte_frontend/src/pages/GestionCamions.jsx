@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  FaTruck,
-  FaPlus,
-  FaEdit,
-  FaTrash,
-} from "react-icons/fa";
+import { FaTruck, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import Sidebar from "../components/Sidebar.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -20,29 +15,49 @@ const GestionCamions = () => {
   const { camions, loading, error, currentPage, totalPages, limit } =
     useSelector((state) => state.camions);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selactedCamion, setselectedCamion] = useState(null);
+  const [selectedCamion, setSelectedCamion] = useState(null);
 
   useEffect(() => {
     dispatch(getAllCamions({ page: currentPage, limit }));
   }, [dispatch, currentPage, limit]);
 
   const handleOpenModal = (camion = null) => {
-    setselectedCamion(camion);
-    setIsModalOpen(true);
+    console.log("camioncamioncamioncamion", camion);
+    setSelectedCamion(camion);
+
+    if (camion === null) {
+      setIsModalOpen(true);
+    }
   };
+  useEffect(() => {
+    if (selectedCamion !== null) {
+      console.log("aaaaaaaaaa", selectedCamion);
+      setIsModalOpen(true);
+    }
+  }, [selectedCamion]);
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setselectedCamion(null);
+    setSelectedCamion(null);
   };
 
   const handleSaveCamion = async (camionData) => {
-    if (camionData.id) {
-      await dispatch(updateCamion(camionData.id)).unwrap();
+    try {
+      if (selectedCamion?._id) {
+        await dispatch(
+          updateCamion({
+            id: selectedCamion._id,
+            data: camionData,
+          })
+        ).unwrap();
+      } else {
+        await dispatch(createCamion(camionData)).unwrap();
+      }
+
       dispatch(getAllCamions({ page: currentPage, limit }));
-    } else {
-      await dispatch(createCamion(camionData)).unwrap();
-      dispatch(getAllCamions({ page: currentPage, limit }));
+      handleCloseModal();
+    } catch (error) {
+      console.error("Erreur sauvegarde camion :", error);
     }
   };
 
@@ -107,7 +122,7 @@ const GestionCamions = () => {
               </thead>
               <tbody>
                 {camions.map((camion) => (
-                  <tr key={camion.id} className="border-b hover:bg-gray-50">
+                  <tr key={camion._id} className="border-b hover:bg-gray-50">
                     <td className="p-4 font-bold text-gray-700">
                       {camion.immatriculation}
                     </td>
@@ -134,7 +149,7 @@ const GestionCamions = () => {
                         <FaEdit size={18} />
                       </button>
                       <button
-                        onClick={() => handleDeleteCamion(camion.id)}
+                        onClick={() => handleDeleteCamion(camion._id)}
                         className="text-red-600 hover:text-red-800"
                       >
                         <FaTrash size={18} />
@@ -151,7 +166,7 @@ const GestionCamions = () => {
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSave={handleSaveCamion}
-          camionId={selactedCamion?.id}
+          selectedCamion={selectedCamion}
         />
       </main>
       //{" "}

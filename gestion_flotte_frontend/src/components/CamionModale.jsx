@@ -1,56 +1,105 @@
 import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getCamionById } from "../features/camionSlice";
+// import { getCamionById } from "../features/camionSlice";
 
-const CamionModal = ({ isOpen, onClose, onSave, camionId }) => {
-  const dispatch = useDispatch();
+const CamionModal = ({ isOpen, onClose, onSave, selectedCamion }) => {
+  // const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     immatriculation: "",
     marque: "",
     modele: "",
+    annee: "",
+    kmDerniereVidange: "",
     kilometrageActuel: "",
     statut: "Disponible",
   });
-  const { camionDetail, loading, error } = useSelector(
+  const { loadingDetail, error } = useSelector(
     (state) => state.camions
   );
 
-  // useEffect(() => {
-  //   setFormData({
-  //     immatriculation: "",
-  //     marque: "",
-  //     modele: "",
-  //     kilometrageActuel: "",
-  //     statut: "Disponible",
-  //   });
-  // });
-
   useEffect(() => {
-    if (camionId) {
-      dispatch(getCamionById(camionId));
+    if (selectedCamion) {
+      console.log("Remplissage du formulaire avec:", selectedCamion);
+      setFormData({
+        immatriculation: selectedCamion.immatriculation || "",
+        marque: selectedCamion.marque || "",
+        modele: selectedCamion.modele || "",
+        annee: selectedCamion.annee || "",
+        kmDerniereVidange: selectedCamion.kmDerniereVidange || "",
+        kilometrageActuel: selectedCamion.kilometrageActuel || "",
+        statut: selectedCamion.statut || "Disponible",
+      });
     } else {
+      console.log("Nouveau camion - formulaire vide");
       setFormData({
         immatriculation: "",
         marque: "",
         modele: "",
+        annee: "",
+        kmDerniereVidange: "",
         kilometrageActuel: "",
         statut: "Disponible",
       });
     }
-  }, [dispatch, camionId]);
+  }, [selectedCamion]);
 
-  useEffect(() => {
-    if (camionId && camionDetail) {
-      setFormData({
-        immatriculation: camionDetail.immatriculation || "",
-        marque: camionDetail.marque || "",
-        modele: camionDetail.modele || "",
-        kilometrage: camionDetail.kilometrage || "",
-        statut: camionDetail.statut || "Disponible",
-      });
-    }
-  }, [camionDetail, camionId]);
+
+  // useEffect(() => {
+  //   if (selectedCamion) {
+  //     setFormData({
+  //       immatriculation: selectedCamion.immatriculation || "",
+  //       marque: selectedCamion.marque || "",
+  //       modele: selectedCamion.modele || "",
+  //       annee: selectedCamion.annee || "",
+  //       kmDerniereVidange: selectedCamion.kmDerniereVidange || "",
+  //       kilometrageActuel: selectedCamion.kilometrageActuel || "",
+  //       statut: selectedCamion.statut || "Disponible",
+  //     });
+  //     console.log("fooooooorm ", formData);
+  //   } else {
+  //     setFormData({
+  //       immatriculation: "",
+  //       marque: "",
+  //       modele: "",
+  //       annee: "",
+  //       kmDerniereVidange: "",
+  //       kilometrageActuel: "",
+  //       statut: "Disponible",
+  //     });
+  //   }
+  // }, [selectedCamion]);
+
+  // useEffect(() => {
+  //   if (camionId) {
+  //     dispatch(getCamionById(camionId));
+  //   } else {
+  //     setFormData({
+  //       immatriculation: "",
+  //       marque: "",
+  //       modele: "",
+  //       annee: "",
+  //       kmDerniereVidange: "",
+  //       kilometrageActuel: "",
+  //       statut: "Disponible",
+  //     });
+  //   }
+  // }, [dispatch, camionId]);
+
+  // useEffect(() => {
+  //   if (camionId && camionDetail) {
+  //     setFormData({
+  //       immatriculation: camionDetail.data.immatriculation || "",
+  //       marque: camionDetail.data.marque || "",
+  //       modele: camionDetail.data.modele || "",
+  //       annee: camionDetail.data.annee || "",
+  //       kmDerniereVidange: camionDetail.data.kmDerniereVidange || "",
+  //       kilometrageActuel: camionDetail.data.kilometrageActuel || "",
+  //       statut: camionDetail.data.statut || "Disponible",
+  //     });
+  //     console.log("camoiDDDDDDDDDDDDDDD", camionDetail);
+  //   }
+  // }, [camionDetail, camionId]);
 
   if (!isOpen) return null;
 
@@ -65,7 +114,13 @@ const CamionModal = ({ isOpen, onClose, onSave, camionId }) => {
     onClose();
   };
 
-  if (loading) return <p>chargement...</p>;
+  if (loadingDetail) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <p className="bg-white p-6 rounded-xl">Chargement...</p>
+      </div>
+    );
+  }
 
   if (error) return <p>Erreur: {error}</p>;
 
@@ -74,7 +129,7 @@ const CamionModal = ({ isOpen, onClose, onSave, camionId }) => {
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-[#002D74]">
-            {camionId ? "Modifier le camion" : "Ajouter un camion"}
+            {selectedCamion ? "Modifier le camion" : "Ajouter un camion"}
           </h2>
           <button
             onClick={onClose}
@@ -118,15 +173,33 @@ const CamionModal = ({ isOpen, onClose, onSave, camionId }) => {
               className="p-3 rounded-xl border w-full"
               required
             />
+            <input
+              type="number"
+              name="annee"
+              value={formData.annee}
+              onChange={handleChange}
+              placeholder="Année"
+              className="p-3 rounded-xl border w-full"
+              required
+            />
+            <input
+              type="number"
+              name="kmDerniereVidange"
+              value={formData.kmDerniereVidange}
+              onChange={handleChange}
+              placeholder="Km dérnier vidange"
+              className="p-3 rounded-xl border w-full"
+              required
+            />
             <select
               name="statut"
               value={formData.statut}
               onChange={handleChange}
               className="p-3 rounded-xl border w-full md:col-span-2"
             >
-              <option>Disponible</option>
-              <option>En mission</option>
-              <option>Maintenance</option>
+              <option value={"Disponible"}>Disponible</option>
+              <option value={"En service"}>En service</option>
+              <option value={"Maintenance"}>Maintenance</option>
             </select>
           </div>
           <div className="mt-8 flex justify-end space-x-4">

@@ -13,7 +13,7 @@ export const createCamion = createAsyncThunk(
     }
   }
 );
-
+ 
 // get all camions
 export const getAllCamions = createAsyncThunk(
   "camions/getAllCamions",
@@ -30,9 +30,9 @@ export const getAllCamions = createAsyncThunk(
 );
 
 // get camion by id
-export const getCamionById = createAsyncThunk(
+export const getCamionById = createAsyncThunk( 
   "camions/getCamionById",
-  async ({ id }, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const res = await api.get(`/camions/${id}`);
       console.log("getcamion by id", res.data);
@@ -59,7 +59,7 @@ export const updateCamion = createAsyncThunk(
 
 export const deleteCamion = createAsyncThunk(
   "camions/deleteCamion",
-  async ({ id }, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const res = await api.delete(`/camions/${id}`);
       console.log("delCamion", res.data);
@@ -76,6 +76,7 @@ const camionSlice = createSlice({
     camions: [],
     camionDetail: null,
     loading: false,
+    loadingDetail: false,
     error: null,
     currentPage: 1,
     totalPages: 1,
@@ -121,15 +122,15 @@ const camionSlice = createSlice({
 
       // get camion by id
       .addCase(getCamionById.pending, (state) => {
-        state.loading = true;
+        state.loadingDetail = true;
         state.error = null;
       })
       .addCase(getCamionById.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingDetail = false;
         state.camionDetail = action.payload;
       })
       .addCase(getCamionById.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingDetail = false;
         state.error = action.payload;
         state.camionDetail = null;
       })
@@ -139,20 +140,20 @@ const camionSlice = createSlice({
         state.error = null;
       })
       .addCase(updateCamion.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingDetail = false;
         const updated = action.payload;
         state.camions = state.camions.map((c) =>
           c._id === updated._id ? updated : c
         );
       })
       .addCase(updateCamion.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingDetail = false;
         state.error = action.payload;
       })
 
       // delete camion
       .addCase(deleteCamion.pending, (state) => {
-        state.loading = true;
+        state.loadingDetail = true;
         state.error = null;
       })
       .addCase(deleteCamion.fulfilled, (state, action) => {
