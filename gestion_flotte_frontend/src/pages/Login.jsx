@@ -14,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { success, error: loginError } = await loginUser(formData);
-    navigate("/dashboard");
+    navigate("/adminDashboard");
     if (success) {
       console.log("Connexion réussie !");
     } else {

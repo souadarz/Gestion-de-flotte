@@ -5,13 +5,13 @@ import GestionCamions from "./pages/GestionCamions.jsx";
 
 function App() {
   return (
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboardAdmin" element={<Dashboard />} />
-          <Route path="/camions" element={<GestionCamions />} />
-        </Routes>
-      </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/adminDashboard" element={<Dashboard />} />
+        <Route path="/camions" element={<GestionCamions />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
