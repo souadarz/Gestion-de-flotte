@@ -5,6 +5,8 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Forbidden from "./pages/Forbidden.jsx";
 import GestionChauffeurs from "./pages/GestionChauffeurs.jsx";
+import GestionTrajets from "./pages/trajets/GestionTrajets.jsx";
+import TrajetDetails from "./pages/trajets/TrajetsDetails.jsx";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
           <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/camions" element={<GestionCamions />} />
           <Route path="/chauffeurs" element={<GestionChauffeurs />} />
+          <Route path="/trajets" element={<GestionTrajets />} />
+          <Route path="/trajet-details/:id" element={<TrajetDetails />} />
         </Route>
         <Route path="/403" element={<Forbidden />} />
       </Routes>

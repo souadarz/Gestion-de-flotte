@@ -24,6 +24,9 @@ const AdminDashboard = () => {
   const { totalItems: totalChauffeurs, currentPage: chauffeurPage, limit: chauffeurLimit } = useSelector(
     (state) => state.chauffeurs
   );
+  const { totalItems: totalTrajets, currentPage: trajetPage, limit: trajetLimit } = useSelector(
+    (state) => state.trajets
+  );
 
   useEffect(() => {
     dispatch(getAllCamions({ page: camionPage, limit: camionLimit }));
@@ -66,7 +69,7 @@ const AdminDashboard = () => {
             <StatCard
               icon={<FaRoute />}
               title="Trajets en cours"
-              value="12"
+              value={totalTrajets}
               color="text-green-500"
             />
             <StatCard
@@ -83,75 +86,7 @@ const AdminDashboard = () => {
             />
           </div>
 
-          {/* actions rapides et tableau */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Colonne de gauche : Trajets récents */}
-            <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-800">
-                  Trajets Récents
-                </h2>
-                <button className="bg-[#002D74] text-white py-2 px-5 rounded-xl font-semibold hover:scale-105 duration-300 flex items-center">
-                  <FaPlus className="mr-2" /> Nouveau Trajet
-                </button>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="py-2">Chauffeur</th>
-                      <th className="py-2">Origine</th>
-                      <th className="py-2">Destination</th>
-                      <th className="py-2">Statut</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b hover:bg-gray-50">
-                      <td className="py-3">Jean Dupont</td>
-                      <td className="py-3">Entrepôt A</td>
-                      <td className="py-3">Client X</td>
-                      <td className="py-3">
-                        <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full">
-                          Terminé
-                        </span>
-                      </td>
-                    </tr>
-                    <tr className="border-b hover:bg-gray-50">
-                      <td className="py-3">Marie Curie</td>
-                      <td className="py-3">Port de Marseille</td>
-                      <td className="py-3">Entrepôt B</td>
-                      <td className="py-3">
-                        <span className="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">
-                          En cours
-                        </span>
-                      </td>
-                    </tr>
-                    <tr className="border-b hover:bg-gray-50">
-                      <td className="py-3">Pierre Martin</td>
-                      <td className="py-3">Fournisseur Y</td>
-                      <td className="py-3">Entrepôt A</td>
-                      <td className="py-3">
-                        <span className="bg-gray-200 text-gray-700 text-xs font-bold px-3 py-1 rounded-full">
-                          À faire
-                        </span>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="py-3">Sophie Lemoine</td>
-                      <td className="py-3">Entrepôt B</td>
-                      <td className="py-3">Client Z</td>
-                      <td className="py-3">
-                        <span className="bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1 rounded-full">
-                          Problème
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Colonne de droite : Statut de la flotte */}
+            {/*Statut de la flotte */}
             <div className="bg-white p-6 rounded-2xl shadow-md">
               <h2 className="text-xl font-bold text-gray-800 mb-4">
                 État de la Flotte
@@ -199,7 +134,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
+          {/* </div> */}
         </main>
       </div>
     </div>

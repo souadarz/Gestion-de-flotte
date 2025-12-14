@@ -20,7 +20,6 @@ const CamionModal = ({ isOpen, onClose, onSave, selectedCamion }) => {
 
   useEffect(() => {
     if (selectedCamion) {
-      console.log("Remplissage du formulaire avec:", selectedCamion);
       setFormData({
         immatriculation: selectedCamion.immatriculation || "",
         marque: selectedCamion.marque || "",
@@ -31,7 +30,6 @@ const CamionModal = ({ isOpen, onClose, onSave, selectedCamion }) => {
         statut: selectedCamion.statut || "Disponible",
       });
     } else {
-      console.log("Nouveau camion - formulaire vide");
       setFormData({
         immatriculation: "",
         marque: "",
@@ -43,32 +41,6 @@ const CamionModal = ({ isOpen, onClose, onSave, selectedCamion }) => {
       });
     }
   }, [selectedCamion]);
-
-
-  // useEffect(() => {
-  //   if (selectedCamion) {
-  //     setFormData({
-  //       immatriculation: selectedCamion.immatriculation || "",
-  //       marque: selectedCamion.marque || "",
-  //       modele: selectedCamion.modele || "",
-  //       annee: selectedCamion.annee || "",
-  //       kmDerniereVidange: selectedCamion.kmDerniereVidange || "",
-  //       kilometrageActuel: selectedCamion.kilometrageActuel || "",
-  //       statut: selectedCamion.statut || "Disponible",
-  //     });
-  //     console.log("fooooooorm ", formData);
-  //   } else {
-  //     setFormData({
-  //       immatriculation: "",
-  //       marque: "",
-  //       modele: "",
-  //       annee: "",
-  //       kmDerniereVidange: "",
-  //       kilometrageActuel: "",
-  //       statut: "Disponible",
-  //     });
-  //   }
-  // }, [selectedCamion]);
 
   // useEffect(() => {
   //   if (camionId) {

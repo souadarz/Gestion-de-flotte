@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import useAuth from "../hooks/useAuth";
+import useAuth from "../hooks/useAuth.js";
 
 const Sidebar = () => {
   const { user } = useAuth();
@@ -44,16 +44,16 @@ const Sidebar = () => {
                   <FaUsers className="mr-3" /> Chauffeurs
                 </Link>
               </li>
-            </>
-          )}
           <li className="mb-2">
             <Link
-              to=""
+              to="/trajets"
               className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
             >
-              <FaExclamationTriangle className="mr-3" /> Maintenance
+              <FaExclamationTriangle className="mr-3" /> Gestion des trajets
             </Link>
           </li>
+           </>
+          )}
         </ul>
       </nav>
       <div className="p-4 border-t border-blue-800">
