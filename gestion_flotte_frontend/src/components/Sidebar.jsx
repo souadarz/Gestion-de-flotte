@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
 const Sidebar = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   return (
     <div className="w-64 bg-[#002D74] text-white flex flex-col">
       <div className="p-6 text-2xl font-bold border-b border-blue-800">
@@ -36,16 +36,16 @@ const Sidebar = () => {
                   <FaTruck className="mr-3" /> Gestion des camions
                 </Link>
               </li>
+              <li className="mb-2">
+                <Link
+                  to="/chauffeurs"
+                  className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
+                >
+                  <FaUsers className="mr-3" /> Chauffeurs
+                </Link>
+              </li>
             </>
           )}
-          <li className="mb-2">
-            <Link
-              to=""
-              className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
-            >
-              <FaUsers className="mr-3" /> Chauffeurs
-            </Link>
-          </li>
           <li className="mb-2">
             <Link
               to=""

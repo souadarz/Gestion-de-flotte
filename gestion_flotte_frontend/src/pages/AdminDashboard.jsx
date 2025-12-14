@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FaTruck,
   FaRoute,
@@ -9,20 +9,28 @@ import {
   FaBell,
   FaUserCircle,
 } from "react-icons/fa";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../components/Sidebar.jsx";
+import StatCard from "../components/StatCard.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCamions } from "../features/camionSlice";
+import { getAllChauffeurs } from "../features/chauffeurSlice.js";
 // import { useNavigate } from "react-router-dom";
 
-const StatCard = ({ icon, title, value, color }) => (
-  <div className="bg-white p-6 rounded-2xl shadow-md flex items-center justify-between">
-    <div>
-      <p className="text-sm font-medium text-gray-500">{title}</p>
-      <p className="text-3xl font-bold text-gray-800">{value}</p>
-    </div>
-    <div className={`text-4xl ${color}`}>{icon}</div>
-  </div>
-);
-
 const AdminDashboard = () => {
+  const dispatch = useDispatch();
+    const { totalItems: totalCamions, currentPage: camionPage, limit: camionLimit } = useSelector(
+    (state) => state.camions
+  );
+  const { totalItems: totalChauffeurs, currentPage: chauffeurPage, limit: chauffeurLimit } = useSelector(
+    (state) => state.chauffeurs
+  );
+
+  useEffect(() => {
+    dispatch(getAllCamions({ page: camionPage, limit: camionLimit }));
+    dispatch(getAllChauffeurs({ page: chauffeurPage, limit: chauffeurLimit }));
+    // console.log("chauuuuu", totalChauffeurs);
+  }, [dispatch, camionPage, camionLimit, chauffeurPage, chauffeurLimit]);
+
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
       <Sidebar />
@@ -45,14 +53,14 @@ const AdminDashboard = () => {
           </div>
         </header>
 
-        {/* Main Content */}
+        {/* Main */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
           {/* Grille de statistiques */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
             <StatCard
               icon={<FaTruck />}
               title="Camions au total"
-              value="42"
+              value={totalCamions}
               color="text-[#002D74]"
             />
             <StatCard
@@ -64,7 +72,7 @@ const AdminDashboard = () => {
             <StatCard
               icon={<FaUsers />}
               title="Chauffeurs disponibles"
-              value="8"
+              value={totalChauffeurs}
               color="text-blue-500"
             />
             <StatCard
@@ -75,7 +83,7 @@ const AdminDashboard = () => {
             />
           </div>
 
-          {/* Section principale avec actions rapides et tableau */}
+          {/* actions rapides et tableau */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Colonne de gauche : Trajets récents */}
             <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-md">
@@ -148,7 +156,6 @@ const AdminDashboard = () => {
               <h2 className="text-xl font-bold text-gray-800 mb-4">
                 État de la Flotte
               </h2>
-              {/* Ici, vous intégreriez une librairie de graphiques comme Chart.js ou Recharts */}
               <div className="text-center text-gray-500">
                 <p className="font-bold text-lg">Graphique de la flotte</p>
                 <div className="relative w-48 h-48 mx-auto my-4">

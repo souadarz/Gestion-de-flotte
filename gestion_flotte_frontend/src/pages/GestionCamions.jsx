@@ -169,7 +169,6 @@ const GestionCamions = () => {
           selectedCamion={selectedCamion}
         />
       </main>
-      //{" "}
     </div>
     // </div>
   );

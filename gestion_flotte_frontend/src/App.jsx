@@ -4,6 +4,7 @@ import GestionCamions from "./pages/GestionCamions.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Forbidden from "./pages/Forbidden.jsx";
+import GestionChauffeurs from "./pages/GestionChauffeurs.jsx";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route element={<ProtectedRoute roles={["admin"]} />}>
           <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/camions" element={<GestionCamions />} />
+          <Route path="/chauffeurs" element={<GestionChauffeurs />} />
         </Route>
         <Route path="/403" element={<Forbidden />} />
       </Routes>
