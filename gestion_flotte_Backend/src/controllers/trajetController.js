@@ -61,26 +61,24 @@ export const createTrajet = async (req, res, next) => {
 //recuperation de tout les trajets
 export const getAllTrajets = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
-    const skip = (page - 1) * limit;
+    // const { page = 1, limit = 10 } = req.query;
+    // const skip = (page - 1) * limit;
 
     const trajets = await Trajet.find()
       .populate("chauffeurId", "nom email")
       .populate("camionId", "immatriculation marque modele")
       .populate("remorqueId", "immatriculation type")
-      .limit(parseInt(limit))
-      .skip(skip)
       .sort({ createdAt: -1 });
 
-    const total = await Trajet.countDocuments();
+    const totalItems = await Trajet.countDocuments();
 
     res.status(200).json({
       success: true,
       message: "trajets récupérés avec succès",
       metaData: {
-        total,
-        page: parseInt(page),
-        pages: Math.ceil(total / limit),
+        totalItems,
+        // currentPage: parseInt(page),
+        // totalPages: Math.ceil(totalItems / limit),
         count: trajets.length,
       },
       data: trajets,
@@ -92,7 +90,9 @@ export const getAllTrajets = async (req, res, next) => {
 
 export const getTrajetsChauffeur = async (req, res, next) => {
   try {
-    const trajets = await Trajet.find({ chauffeurId: req.user.id })
+    console.log("REQ.USER:", req.user);
+    const chauffeurId = req.query.chauffeurId || req.user._id;
+    const trajets = await Trajet.find({ chauffeurId })
       .populate("camionId", "immatriculation marque modele")
       .populate("remorqueId", "immatriculation type");
 
@@ -196,33 +196,33 @@ export const updateTrajetChauffeur = async (req, res, next) => {
   }
 };
 
-// export const updatetrajet = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const updateData = req.body;
+// update trajet par admin
+export const updatetrajet = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
 
-//     const trajet = await Trajet.findById(id);
-//     if (!trajet) {
-//       return res.status(404).json({
-//         success: false,
-//         message: "trajet non trouvé",
-//       });
-//     }
-
-//     const updatedtrajet = await Trajet.findByIdAndUpdate(id, updateData, {
-//       new: true,
-//       runValidators: true,
-//     });
-
-//     res.status(200).json({
-//       success: true,
-//       message: "trajet mis à jour avec succès",
-//       data: updatedtrajet,
-//     });
-//   } catch (error) {            
-//     next(error);
-//   }
-// };
+    const trajet = await Trajet.findById(id);
+    
+    const updatedtrajet = await Trajet.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+    
+    if (!updatedtrajet) {
+      const err = new Error("trajet non trouvé");
+      err.statusCode = 404;
+      throw err;
+    }
+    res.status(200).json({
+      success: true,
+      message: "trajet mis à jour avec succès",
+      data: updatedtrajet,
+    });
+  } catch (error) {            
+    next(error);
+  }
+};
 
 export const deleteTrajet = async (req, res, next) => {
   try {

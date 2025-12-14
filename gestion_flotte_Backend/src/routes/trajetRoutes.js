@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", roleMiddleware("admin"), createTrajet);
 router.get("/", roleMiddleware("admin"), getAllTrajets);
-router.get("/chauffeur", roleMiddleware("admin", "chauffeur"), getTrajetsChauffeur);
+router.get("/chauffeur", getTrajetsChauffeur);
 router.get("/:id", getTrajetById);
 router.put("/:id", roleMiddleware("chauffeur"),updateTrajetChauffeur);
 router.delete("/:id",roleMiddleware("admin"), deleteTrajet);

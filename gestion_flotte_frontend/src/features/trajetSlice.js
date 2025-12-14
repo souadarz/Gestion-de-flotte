@@ -17,9 +17,9 @@ export const createTrajet = createAsyncThunk(
 // get all trajets (admin)
 export const getAllTrajets = createAsyncThunk(
   "trajets/getAllTrajets",
-  async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`/trajets?page=${page}&limit=${limit}`);
+      const res = await api.get("/trajets");
       return { metaData: res.data.metaData, data: res.data.data };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -43,9 +43,10 @@ export const getTrajetById = createAsyncThunk(
 // get trajets du chauffeur connecté
 export const getTrajetsChauffeur = createAsyncThunk(
   "trajets/getTrajetsChauffeur",
-  async (_, { rejectWithValue }) => {
+  async (chauffeurId, { rejectWithValue }) => {
     try {
-      const res = await api.get("/trajets/chauffeur");
+      const res = await api.get(`/trajets/chauffeur?chauffeurId=${chauffeurId}`);
+      console.log("trajetchuffeur",res.data.data);
       return res.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
