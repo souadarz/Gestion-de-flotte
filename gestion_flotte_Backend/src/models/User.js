@@ -11,7 +11,8 @@ const UserShema = new mongoose.Schema(
         },
         motDePasse: {
             type: String,
-            required: true
+            required: true,
+            select: false,
         },
         role: {
             type: String,

@@ -6,11 +6,25 @@ import {
   FaUsers,
 } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../hooks/useAuth.js";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/authSlice.js";
 
 const Sidebar = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logout()).unwrap();
+    } catch (err) {
+      console.error("Erreur logout:", err);
+    } finally {
+      navigate("/login");
+    }
+  };
   return (
     <div className="w-64 bg-[#002D74] text-white flex flex-col">
       <div className="p-6 text-2xl font-bold border-b border-blue-800">
@@ -44,25 +58,25 @@ const Sidebar = () => {
                   <FaUsers className="mr-3" /> Chauffeurs
                 </Link>
               </li>
-          <li className="mb-2">
-            <Link
-              to="/trajets"
-              className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
-            >
-              <FaExclamationTriangle className="mr-3" /> Gestion des trajets
-            </Link>
-          </li>
-           </>
+              <li className="mb-2">
+                <Link
+                  to="/trajets"
+                  className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
+                >
+                  <FaExclamationTriangle className="mr-3" /> Gestion des trajets
+                </Link>
+              </li>
+            </>
           )}
         </ul>
       </nav>
       <div className="p-4 border-t border-blue-800">
-        <Link
-          to=""
+        <button
+          onClick={handleLogout}
           className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
         >
           <FiLogOut className="mr-3" /> Déconnexion
-        </Link>
+        </button>
       </div>
     </div>
   );

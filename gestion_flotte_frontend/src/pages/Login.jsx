@@ -1,11 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { loginUser, loading, error } = useAuth();
+  const { loginUser, loading, error, isAuthenticated, user, isInitialized } =
+    useAuth();
   const [formData, setFormData] = useState({ email: "", motDePasse: "" });
+
+  // Rediriger si déjà connecté
+  useEffect(() => {
+    if (isInitialized && isAuthenticated && user) {
+      const role = user.role?.toLowerCase();
+      if (role === "admin") {
+        navigate("/adminDashboard", { replace: true });
+      } else if (role === "chauffeur") {
+        navigate("/chauffeurDashbord", { replace: true });
+      }
+    }
+  }, [isInitialized, isAuthenticated, user, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -13,14 +26,33 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { success, error: loginError } = await loginUser(formData);
-    navigate("/adminDashboard");
+    const { success, error: loginError, data } = await loginUser(formData);
+
     if (success) {
+      const role = data?.role?.toLowerCase();
       console.log("Connexion réussie !");
+
+      if (role === "admin") {
+        navigate("/adminDashboard");
+      } else if (role === "chauffeur") {
+        navigate("/chauffeurDashbord");
+      }
     } else {
       console.error("Erreur de connexion :", loginError);
     }
   };
+
+  if (!isInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <section className="bg-gray-100 min-h-screen flex box-border justify-center items-center">

@@ -1,25 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useCallback, useEffect } from 'react';
-import {
-  login,
-  logout,
-  getUserConnected,
-} from '../features/authSlice.js';
+import { useDispatch, useSelector } from "react-redux";
+import { useCallback, useEffect } from "react";
+import { login, logout, getUserConnected } from "../features/authSlice.js";
 
 const useAuth = () => {
   const dispatch = useDispatch();
+  const { user, isAuthenticated, loading, error, token, isInitialized } =
+    useSelector((state) => state.auth);
 
-  // Sélecteurs
-  const user = useSelector((state) => state.auth.user);
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-  const loading = useSelector((state) => state.auth.loading);
-  const error = useSelector((state) => state.auth.error);
-  const token = useSelector((state) => state.auth.token);
-  const isInitialized = useSelector((state) => state.auth.isInitialized);
-
-  
   useEffect(() => {
-    if (!isInitialized) {
+    const token = localStorage.getItem('token');
+    if (token && !isInitialized) {
       dispatch(getUserConnected());
     }
   }, [dispatch, isInitialized]);

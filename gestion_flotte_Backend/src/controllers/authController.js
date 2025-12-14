@@ -11,7 +11,7 @@ export const login = async (req, res, next) => {
       throw err;
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+motDePasse');
 
     if (!user || !(await user.comparePassword(motDePasse))) {
       const err = new Error("Email ou mot de passe incorrect");

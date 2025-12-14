@@ -10,8 +10,8 @@ export const login = createAsyncThunk(
       const { token, data } = res.data;
       // console.log("logiiiin", res.data);
       // console.log("logiiiin", res.data.token);
-      localStorage.setItem("token", res.data.token);
-      return { token, user: data };
+      localStorage.setItem("token", token);
+      return data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
@@ -38,7 +38,7 @@ export const getUserConnected = createAsyncThunk(
     try {
       const res = await api.get("/auth/me");
       console.log("getuserconnect", res.data);
-      return { token, user: res.data.data };
+      return res.data.data;
     } catch (error) {
       localStorage.removeItem("token");
       return rejectWithValue(error.response?.data || error.message);
@@ -61,7 +61,12 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.isAuthenticated = false;
+      state.isInitialized = true;
       localStorage.removeItem("token");
+    },
+
+    setInitialized: (state) => {
+      state.isInitialized = true;
     },
   },
 
@@ -75,12 +80,18 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.token = localStorage.getItem("token");
+        state.user = action.payload;
+        state.isInitialized = true;
+        state.error = null;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+        state.isInitialized = true;
       })
 
       //logout
@@ -89,29 +100,34 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
+        state.isInitialized = true;
+        state.error = null;
       })
 
       //getUserConnected
       .addCase(getUserConnected.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(getUserConnected.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = true;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.token = localStorage.getItem("token");
+        state.user = action.payload;
         state.isInitialized = true;
+        state.error = null;
       })
-      .addCase(getUserConnected.rejected, (state) => {
+      .addCase(getUserConnected.rejected, (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
         state.user = null;
         state.token = null;
         state.isInitialized = true;
+        state.error = action.payload;
       });
   },
 });
 
-export const { logoutLocal } = authSlice.actions;
+export const { logoutLocal, setInitialized } = authSlice.actions;
 
 export default authSlice.reducer;
