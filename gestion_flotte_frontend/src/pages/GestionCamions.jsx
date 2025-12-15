@@ -12,17 +12,17 @@ import CamionModal from "../components/camionModale.jsx";
 
 const GestionCamions = () => {
   const dispatch = useDispatch();
-  const { camions, loading, error, currentPage, totalPages, limit } =
+  const { camions, loading, error } =
     useSelector((state) => state.camions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCamion, setSelectedCamion] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllCamions({ page: currentPage, limit }));
-  }, [dispatch, currentPage, limit]);
+    dispatch(getAllCamions());
+  }, [dispatch]);
 
   const handleOpenModal = (camion = null) => {
-    console.log("camioncamioncamioncamion", camion);
+    // console.log("camioncamioncamioncamion", camion);
     setSelectedCamion(camion);
 
     if (camion === null) {
@@ -31,7 +31,7 @@ const GestionCamions = () => {
   };
   useEffect(() => {
     if (selectedCamion !== null) {
-      console.log("aaaaaaaaaa", selectedCamion);
+      // console.log("aaaaaaaaaa", selectedCamion);
       setIsModalOpen(true);
     }
   }, [selectedCamion]);
@@ -54,7 +54,7 @@ const GestionCamions = () => {
         await dispatch(createCamion(camionData)).unwrap();
       }
 
-      dispatch(getAllCamions({ page: currentPage, limit }));
+      dispatch(getAllCamions());
       handleCloseModal();
     } catch (error) {
       console.error("Erreur sauvegarde camion :", error);
@@ -65,7 +65,7 @@ const GestionCamions = () => {
     try {
       if (window.confirm("Êtes-vous sûr de vouloir supprimer ce camion ?")) {
         await dispatch(deleteCamion(id)).unwrap();
-        dispatch(getAllCamions({ page: currentPage, limit }));
+        dispatch(getAllCamions());
       }
     } catch (error) {
       console.error("Erreur suppression :", error);
@@ -85,7 +85,16 @@ const GestionCamions = () => {
     }
   };
 
-  if (loading) return <p>Chargement...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (error) return <p>Erreur: {error}</p>;
 

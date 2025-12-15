@@ -7,23 +7,23 @@ import {
   getAllTrajets,
   deleteTrajet,
   getTrajetById,
+  updateTrajet,
 } from "../../features/trajetSlice.js";
 import { useNavigate } from "react-router-dom";
-// import TrajetModal from "../components/TrajetModal.jsx";
+import TrajetAdminModal from "../../components/TrajetAdminModal.jsx";
 
 const GestionTrajets = () => {
-  const  navigate = useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { trajets, loading, error, currentPage, totalPages, limit } =
-    useSelector((state) => state.trajets);
+  const { trajets, loading, error } = useSelector((state) => state.trajets);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTrajet, setSelectedTrajet] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllTrajets({ page: currentPage, limit }));
-  }, [dispatch, currentPage, limit]);
+    dispatch(getAllTrajets());
+  }, [dispatch]);
 
   const handleOpenModal = (trajet = null) => {
     setSelectedTrajet(trajet);
@@ -37,8 +37,18 @@ const GestionTrajets = () => {
 
   const handleSaveTrajet = async (trajetData) => {
     try {
-      await dispatch(createTrajet(trajetData)).unwrap();
-      dispatch(getAllTrajets({ page: currentPage, limit }));
+      if (selectedTrajet?._id) {
+        await dispatch(
+          updateTrajet({
+            id: selectedTrajet._id,
+            data: trajetData,
+          })
+        ).unwrap();
+      } else {
+        await dispatch(createTrajet(trajetData)).unwrap();
+      }
+
+      dispatch(getAllTrajets());
       handleCloseModal();
     } catch (err) {
       console.error("Erreur création trajet :", err);
@@ -48,8 +58,8 @@ const GestionTrajets = () => {
   const handleDeleteTrajet = async (id) => {
     try {
       if (window.confirm("Supprimer ce trajet ?")) {
-        await dispatch(deleteTrajet(id)).unwrap();
-        dispatch(getAllTrajets({ page: currentPage, limit }));
+        dispatch(deleteTrajet(id));
+        // dispatch(getAllTrajets());
       }
     } catch (err) {
       console.error("Erreur suppression trajet :", err);
@@ -57,7 +67,7 @@ const GestionTrajets = () => {
   };
 
   if (loading) return <p className="p-6">Chargement...</p>;
-  if (error) return <p className="p-6 text-red-600">Erreur : {error}</p>;
+  if (error) return <p className="p-6 text-red-600">Erreur : {error.message}</p>;
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -128,7 +138,6 @@ const GestionTrajets = () => {
                         {trajet.statut}
                       </span>
                     </td>
-                    {/* <td className="p-4">{trajet.remarque || "-"}</td> */}
                     <td className="p-4 flex justify-center gap-4">
                       <button
                         onClick={() => handleOpenModal(trajet)}
@@ -143,7 +152,9 @@ const GestionTrajets = () => {
                         <FaTrash />
                       </button>
                       <button
-                        onClick={() => navigate(`/trajet-details/${trajet._id}`)}
+                        onClick={() =>
+                          navigate(`/trajet-details/${trajet._id}`)
+                        }
                         className="text-blue-600 hover:text-blue-800"
                       >
                         <FaEye />
@@ -164,12 +175,12 @@ const GestionTrajets = () => {
           </div>
         </div>
 
-        {/* <TrajetModal
+        <TrajetAdminModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}
           onSave={handleSaveTrajet}
           selectedTrajet={selectedTrajet}
-        /> */}
+        />
       </main>
     </div>
   );

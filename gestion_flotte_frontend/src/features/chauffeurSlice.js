@@ -17,14 +17,13 @@ export const createChauffeur = createAsyncThunk(
 // get all chauffeurs
 export const getAllChauffeurs = createAsyncThunk(
   "chauffeurs/getAllChauffeurs",
-  async ({ page = 1, limit = 10, search = "" }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       const res = await api.get(
-        `/users/chauffeurs?page=${page}&limit=${limit}&search=${search}`
+        `/users/chauffeurs`
       );
-
-      const { metaData, data } = res.data;
-      return { metaData, data };
+      return res.data;
+      
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }

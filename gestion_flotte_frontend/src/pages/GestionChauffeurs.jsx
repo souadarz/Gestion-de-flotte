@@ -11,15 +11,15 @@ import ChauffeurModal from "../components/chauffeurModale.jsx";
 const GestionChauffeurs = () => {
   const dispatch = useDispatch();
 
-  const { chauffeurs, loading, error, currentPage, totalPages, limit } =
+  const { chauffeurs, loading, error } =
     useSelector((state) => state.chauffeurs);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChauffeur, setSelectedChauffeur] = useState(null);
 
   useEffect(() => {
-    dispatch(getAllChauffeurs({ page: currentPage, limit }));
-  }, [dispatch, currentPage, limit]);
+    dispatch(getAllChauffeurs());
+  }, [dispatch]);
 
   const handleOpenModal = (chauffeur = null) => {
     setSelectedChauffeur(chauffeur);
@@ -34,23 +34,23 @@ const GestionChauffeurs = () => {
   const handleSaveChauffeur = async (chauffeurData) => {
     try {
       await dispatch(createChauffeur(chauffeurData)).unwrap();
-      dispatch(getAllChauffeurs({ page: currentPage, limit }));
+      dispatch(getAllChauffeurs());
       handleCloseModal();
     } catch (err) {
       console.error("Erreur création chauffeur :", err);
     }
   };
 
-  const handleDeleteChauffeur = async (id) => {
-    try {
-      if (window.confirm("Supprimer ce chauffeur ?")) {
-        await dispatch(deleteChauffeur(id)).unwrap();
-        dispatch(getAllChauffeurs({ page: currentPage, limit }));
-      }
-    } catch (err) {
-      console.error("Erreur suppression chauffeur :", err);
-    }
-  };
+  // const handleDeleteChauffeur = async (id) => {
+  //   try {
+  //     if (window.confirm("Supprimer ce chauffeur ?")) {
+  //       await dispatch(deleteChauffeur(id)).unwrap();
+  //       dispatch(getAllChauffeurs({ page: currentPage, limit }));
+  //     }
+  //   } catch (err) {
+  //     console.error("Erreur suppression chauffeur :", err);
+  //   }
+  // };
 
   if (loading) return <p className="p-6">Chargement...</p>;
   if (error) return <p className="p-6 text-red-600">Erreur : {error}</p>;
@@ -108,12 +108,12 @@ const GestionChauffeurs = () => {
                       >
                         <FaEdit />
                       </button>
-                      <button
+                      {/* <button
                         onClick={() => handleDeleteChauffeur(chauffeur._id)}
                         className="text-red-600 hover:text-red-800"
                       >
                         <FaTrash />
-                      </button>
+                      </button> */}
                     </td>
                   </tr>
                 ))}
