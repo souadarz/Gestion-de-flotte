@@ -72,15 +72,15 @@ export const getAllChauffeurs = async (req, res, next) => {
       .limit(parseInt(limit))
       .skip(skip);
 
-    const total = await User.countDocuments(filter);
+    const totalItems = await User.countDocuments(filter);
 
     res.status(200).json({
       success: true,
       message: "chauffeurs récupérés avec succès",
       metaData: {
-        total,
-        page: parseInt(page),
-        pages: Math.ceil(total / limit),
+        totalItems,
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(totalItems / limit),
         count: chauffeurs.length,
       },
       data: chauffeurs,

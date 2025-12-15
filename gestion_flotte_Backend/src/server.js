@@ -10,14 +10,13 @@ dotenv.config();
 connectDB();
 const app = express();
 
-
-// app.use(cors());
-
-app.use(cors({
-  origin: "http://localhost:5173",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
@@ -29,10 +28,10 @@ app.use("/api", allRoutes);
 
 const PORT = process.env.PORT || 3000;
 
+app.use(ErrorHandler);
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-app.use(ErrorHandler);
 
 export default app;
