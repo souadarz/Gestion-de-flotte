@@ -8,6 +8,7 @@ import GestionChauffeurs from "./pages/GestionChauffeurs.jsx";
 import GestionTrajets from "./pages/trajets/GestionTrajets.jsx";
 import TrajetDetails from "./pages/trajets/TrajetsDetails.jsx";
 import ChauffeurDashboard from "./pages/ChauffeurDashboard.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/chauffeurDashbord" element={<ChauffeurDashboard />} />
         </Route>
         <Route path="/403" element={<Forbidden />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

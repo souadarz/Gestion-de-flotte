@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaRoute,
   FaFilePdf,
@@ -12,11 +12,14 @@ import {
 import Sidebar from "../components/Sidebar.jsx";
 import StatCard from "../components/StatCard.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { getTrajetsChauffeur } from "../features/trajetSlice.js";
+import { getTrajetsChauffeur, updateTrajetChauffeur } from "../features/trajetSlice.js";
 import useAuth from "../hooks/useAuth.js";
+import TrajetChauffeurModal from "../components/TrajetCauffeurModal.jsx";
 
 const ChauffeurDashboard = () => {
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTrajet, setSelectedTrajet] = useState("");
 
   // const { user } = useSelector((state) => state.auth);
   const { user } = useAuth()
@@ -32,6 +35,21 @@ const ChauffeurDashboard = () => {
       dispatch(getTrajetsChauffeur(user.id));
     }
   }, [dispatch, user]);
+
+  const openTrajetModal = (trajetId)=>{
+    setIsModalOpen(true);
+    setSelectedTrajet(trajetId)
+  }
+
+  const handleCloseModal = ()=>{
+    setIsModalOpen(false);
+  }
+
+  const handleSaveTrajet = async (trajetData)=>{
+    if(selectedTrajet?._id){
+      await dispatch(updateTrajetChauffeur({id:selectedTrajet._id, data: trajetData} ));
+    }
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
@@ -91,6 +109,8 @@ const ChauffeurDashboard = () => {
                 <tr className="text-left text-gray-500 border-b">
                   <th>Départ</th>
                   <th>Arrivée</th>
+                  <th>Date départ</th>
+                  <th>Date Arrivée</th>
                   <th>Camion</th>
                   <th>Remorque</th>
                   <th>Statut</th>
@@ -107,8 +127,9 @@ const ChauffeurDashboard = () => {
                     <td>{trajet.dateArrivee}</td>
                     <td>{trajet.camionId?.immatriculation}</td>
                     <td>{trajet.remorqueId?.immatriculation}</td>
+                    <td>{trajet.statut}</td>
 
-                    <td>
+                    {/* <td>
                       <select
                         value={trajet.status}
                         onChange={(e) =>
@@ -123,7 +144,7 @@ const ChauffeurDashboard = () => {
                         <option value="en_cours">En cours</option>
                         <option value="terminé">Terminé</option>
                       </select>
-                    </td>
+                    </td> */}
 
                     <td className="flex gap-3 py-2">
                       <button
@@ -136,7 +157,7 @@ const ChauffeurDashboard = () => {
                       <button
                         className="text-blue-600 hover:text-blue-800"
                         title="Compléter trajet"
-                        onClick={() => openTrajetModal(trajet)}
+                        onClick={() => openTrajetModal(trajet._id)}
                       >
                         <FaClock />
                       </button>
@@ -147,6 +168,12 @@ const ChauffeurDashboard = () => {
             </table>
 
           </div>
+           <TrajetChauffeurModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSave={handleSaveTrajet}
+          selectedTrajet={selectedTrajet}
+        />
         </main>
       </div>
     </div>

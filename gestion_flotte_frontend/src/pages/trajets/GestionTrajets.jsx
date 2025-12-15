@@ -35,6 +35,7 @@ const GestionTrajets = () => {
     setSelectedTrajet(null);
   };
 
+  // console.log("select", selectedTrajet);
   const handleSaveTrajet = async (trajetData) => {
     try {
       if (selectedTrajet?._id) {
@@ -51,7 +52,7 @@ const GestionTrajets = () => {
       dispatch(getAllTrajets());
       handleCloseModal();
     } catch (err) {
-      console.error("Erreur création trajet :", err);
+      console.error("Erreur création ou modification trajet :", err);
     }
   };
 

@@ -61,8 +61,6 @@ export const createTrajet = async (req, res, next) => {
 //recuperation de tout les trajets
 export const getAllTrajets = async (req, res, next) => {
   try {
-    // const { page = 1, limit = 10 } = req.query;
-    // const skip = (page - 1) * limit;
 
     const trajets = await Trajet.find()
       .populate("chauffeurId", "nom email")
@@ -77,8 +75,6 @@ export const getAllTrajets = async (req, res, next) => {
       message: "trajets récupérés avec succès",
       metaData: {
         totalItems,
-        // currentPage: parseInt(page),
-        // totalPages: Math.ceil(totalItems / limit),
         count: trajets.length,
       },
       data: trajets,

@@ -14,25 +14,29 @@ import StatCard from "../components/StatCard.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllCamions } from "../features/camionSlice";
 import { getAllChauffeurs } from "../features/chauffeurSlice.js";
+import { getAllTrajets } from "../features/trajetSlice.js";
 // import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
   const dispatch = useDispatch();
-    const { totalItems: totalCamions, currentPage: camionPage, limit: camionLimit } = useSelector(
+    const { totalItems: totalCamions} = useSelector(
     (state) => state.camions
   );
-  const { totalItems: totalChauffeurs, currentPage: chauffeurPage, limit: chauffeurLimit } = useSelector(
+  const { totalItems: totalChauffeurs} = useSelector(
     (state) => state.chauffeurs
   );
-  const { totalItems: totalTrajets, currentPage: trajetPage, limit: trajetLimit } = useSelector(
-    (state) => state.trajets
-  );
-
+  // const { totalItems: totalTrajets} = useSelector(
+  //   (state) => state.trajets
+  // );
+  //trajets en cours:
+  const trajetsEnCours = useSelector((state)=>state.trajets.trajets.filter(trajet=>trajet.statut === "en_cours"));
+  console.log("en_cours",trajetsEnCours.length);
   useEffect(() => {
-    dispatch(getAllCamions({ page: camionPage, limit: camionLimit }));
-    dispatch(getAllChauffeurs({ page: chauffeurPage, limit: chauffeurLimit }));
+    dispatch(getAllCamions());
+    dispatch(getAllChauffeurs());
+    dispatch(getAllTrajets());
     // console.log("chauuuuu", totalChauffeurs);
-  }, [dispatch, camionPage, camionLimit, chauffeurPage, chauffeurLimit]);
+  }, [dispatch]);
 
   return (
     <div className="flex h-screen bg-gray-100 font-sans">
@@ -69,12 +73,12 @@ const AdminDashboard = () => {
             <StatCard
               icon={<FaRoute />}
               title="Trajets en cours"
-              value={totalTrajets}
+              value={trajetsEnCours.length}
               color="text-green-500"
             />
             <StatCard
               icon={<FaUsers />}
-              title="Chauffeurs disponibles"
+              title="Total Chauffeurs"
               value={totalChauffeurs}
               color="text-blue-500"
             />
