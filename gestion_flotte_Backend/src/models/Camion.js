@@ -10,7 +10,7 @@ const CamionSchema = new mongoose.Schema(
     statut: {
       type: String,
       required: true,
-      enum: ["disponible", "en_service", "en_maintenance"],
+      enum: ["disponible", "En service", "Maintenance"],
       default: "disponible",
     },
     kmDerniereVidange: { type: Number, required: true },

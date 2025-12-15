@@ -3,8 +3,8 @@ import { createChauffeur, getAllChauffeurs, getChauffeurById } from "../controll
 
 const router = express.Router();
 
-router.post("/chauffeur", createChauffeur);
-router.get("/chauffeur", getAllChauffeurs);
-router.get("/chauffeur/:id", getChauffeurById);
+router.post("/chauffeurs", createChauffeur);
+router.get("/chauffeurs", getAllChauffeurs);
+router.get("/chauffeurs/:id", getChauffeurById);
 
 export default router;
