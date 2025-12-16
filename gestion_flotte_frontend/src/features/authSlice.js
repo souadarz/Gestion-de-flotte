@@ -37,7 +37,7 @@ export const getUserConnected = createAsyncThunk(
 
     try {
       const res = await api.get("/auth/me");
-      console.log("getuserconnect", res.data);
+      // console.log("getuserconnect", res.data);
       return res.data.data;
     } catch (error) {
       localStorage.removeItem("token");

@@ -8,10 +8,16 @@ const MaintenanceSchema = new mongoose.Schema(
       required: true,
     },
 
+    vehiculeModel: {
+      type: String,
+      enum: ["Camion", "Remorque"],
+      required: true,
+    },
+
     vehiculeId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      refPath: "vehiculeType",
+      refPath: "vehiculeModel",
     },
 
     regleMaintenanceId: {

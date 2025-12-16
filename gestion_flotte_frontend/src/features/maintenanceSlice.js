@@ -20,6 +20,7 @@ export const getAllMaintenances = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/maintenances/");
+      console.log("maintenaceeeeeeeees: ", res.data);
       const { metaData, data } = res.data;
       return { metaData, data };
     } catch (error) {

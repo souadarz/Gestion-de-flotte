@@ -20,7 +20,6 @@ export const getAllRemorques = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/remorques");
-      console.log(res.data);
       const { metaData, data } = res.data;
       return { metaData, data };
     } catch (error) {

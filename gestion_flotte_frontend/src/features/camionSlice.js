@@ -20,7 +20,7 @@ export const getAllCamions = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/camions");
-      console.log(res.data);
+      // console.log(res.data);
       const { metaData, data } = res.data;
       return { metaData, data };
     } catch (error) {

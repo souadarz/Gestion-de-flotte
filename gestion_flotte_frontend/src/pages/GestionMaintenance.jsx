@@ -11,74 +11,94 @@ import {
   FaTachometerAlt,
 } from "react-icons/fa";
 import Sidebar from "../components/Sidebar.jsx";
+import MaintenanceModal from "../components/modals/MaintenanceModal.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  createMaintenance,
+  deleteMaintenance,
+  getAllMaintenances,
+  updateMaintenance,
+} from "../features/maintenanceSlice.js";
+import { getAllCamions } from "../features/camionSlice.js";
+import { getAllRemorques } from "../features/remorqueSlice.js";
+import RegleMaintenanceModal from "../components/modals/RegleMaintenanceModal.jsx";
+import {
+  createRegleMaintenance,
+  deleteRegleMaintenance,
+  getAllRegleMaintenance,
+  updateRegleMaintenance,
+} from "../features/regleMaintenanceSlice.js";
 
 const GestionMaintenance = () => {
+  const dispatch = useDispatch();
+  const regles = useSelector((state) => state.regleMaintenances.regles);
+  const maintenances = useSelector((state) => state.maintenances.maintenances);
+  console.log("maintenance", maintenances);
   const [activeTab, setActiveTab] = useState("regles");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalType, setModalType] = useState("");
 
-  // États pour les règles
-  const [regles, setRegles] = useState([
-    {
-      _id: "1",
-      type: "vidange",
-      description: "Vidange moteur standard",
-      periodiciteKm: 10000,
-      periodiciteMois: 12,
-      seuilAlerteKm: 500,
-    },
-    {
-      _id: "2",
-      type: "pneus",
-      description: "Vérification et rotation des pneus",
-      periodiciteKm: 15000,
-      periodiciteMois: null,
-      seuilAlerteKm: 1000,
-    },
-    {
-      _id: "3",
-      type: "revision",
-      description: "Révision complète annuelle",
-      periodiciteKm: null,
-      periodiciteMois: 12,
-      seuilAlerteJours: 7,
-    },
-  ]);
+  //   const [regles, setRegles] = useState([]);
+  //     {
+  //       _id: "1",
+  //       type: "vidange",
+  //       description: "Vidange moteur standard",
+  //       periodiciteKm: 10000,
+  //       periodiciteMois: 12,
+  //       seuilAlerteKm: 500,
+  //     },
+  //     {
+  //       _id: "2",
+  //       type: "pneus",
+  //       description: "Vérification et rotation des pneus",
+  //       periodiciteKm: 15000,
+  //       periodiciteMois: null,
+  //       seuilAlerteKm: 1000,
+  //     },
+  //     {
+  //       _id: "3",
+  //       type: "revision",
+  //       description: "Révision complète annuelle",
+  //       periodiciteKm: null,
+  //       periodiciteMois: 12,
+  //       seuilAlerteJours: 7,
+  //     },
+  //   ]);
 
   // États pour les maintenances
-  const [maintenances, setMaintenances] = useState([
-    {
-      _id: "1",
-      vehiculeType: "camion",
-      vehiculeImmatriculation: "ABC-123",
-      type: "vidange",
-      dateMaintenance: "2024-12-10",
-      kilometrageRealisation: 45000,
-      cout: 250,
-      description: "Vidange + remplacement filtre à huile",
-    },
-    {
-      _id: "2",
-      vehiculeType: "camion",
-      vehiculeImmatriculation: "XYZ-789",
-      type: "pneus",
-      dateMaintenance: "2024-12-05",
-      kilometrageRealisation: 62000,
-      cout: 800,
-      description: "Remplacement 2 pneus avant",
-    },
-    {
-      _id: "3",
-      vehiculeType: "remorque",
-      vehiculeImmatriculation: "REM-456",
-      type: "revision",
-      dateMaintenance: "2024-11-28",
-      kilometrageRealisation: 30000,
-      cout: 450,
-      description: "Révision complète + contrôle freinage",
-    },
-  ]);
+  //   const [maintenances, setMaintenances] = useState([]);
+  //     {
+  //       _id: "1",
+  //       vehiculeType: "camion",
+  //       vehiculeImmatriculation: "ABC-123",
+  //       type: "vidange",
+  //       dateMaintenance: "2024-12-10",
+  //       kilometrageRealisation: 45000,
+  //       cout: 250,
+  //       description: "Vidange + remplacement filtre à huile",
+  //     },
+  //     {
+  //       _id: "2",
+  //       vehiculeType: "camion",
+  //       vehiculeImmatriculation: "XYZ-789",
+  //       type: "pneus",
+  //       dateMaintenance: "2024-12-05",
+  //       kilometrageRealisation: 62000,
+  //       cout: 800,
+  //       description: "Remplacement 2 pneus avant",
+  //     },
+  //     {
+  //       _id: "3",
+  //       vehiculeType: "remorque",
+  //       vehiculeImmatriculation: "REM-456",
+  //       type: "revision",
+  //       dateMaintenance: "2024-11-28",
+  //       kilometrageRealisation: 30000,
+  //       cout: 450,
+  //       description: "Révision complète + contrôle freinage",
+  //     },
+  //   ]);
 
   const handleOpenModal = (item = null, type = "") => {
     setSelectedItem(item);
@@ -92,17 +112,65 @@ const GestionMaintenance = () => {
     setModalType("");
   };
 
-  const handleDeleteRegle = (id) => {
+  const handleDeleteRegle = (selectedItem) => {
     if (window.confirm("Êtes-vous sûr de vouloir supprimer cette règle ?")) {
-      setRegles(regles.filter((r) => r._id !== id));
+      dispatch(deleteRegleMaintenance(selectedItem));
+      dispatch(getAllRegleMaintenance());
     }
   };
 
-  const handleDeleteMaintenance = (id) => {
-    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette maintenance ?")) {
-      setMaintenances(maintenances.filter((m) => m._id !== id));
+  const handleDeleteMaintenance = (selectedItem) => {
+    try {
+      if (
+        window.confirm("Êtes-vous sûr de vouloir supprimer cette maintenance ?")
+      ) {
+        dispatch(deleteMaintenance(selectedItem));
+        dispatch(getAllMaintenances());
+      }
+    } catch (error) {
+        console.error("Erreur suppression maintenance :", error);
     }
   };
+
+  const handleSaveMaitenance = async (data) => {
+    try {
+      if (selectedItem?.id) {
+        await dispatch(updateMaintenance({ id: selectedItem.id, data: data }));
+      } else {
+        await dispatch(createMaintenance(data));
+      }
+      dispatch(getAllMaintenances());
+      handleCloseModal();
+    } catch (error) {
+      console.error("Erreur création ou modification maintenance :", error);
+    }
+  };
+
+  const handleSaveRegleMaitenance = async (data) => {
+    try {
+      if (selectedItem?.id) {
+        await dispatch(
+          updateRegleMaintenance({ id: selectedItem.id, data: data })
+        );
+      } else {
+        await dispatch(createRegleMaintenance(data));
+      }
+      dispatch(getAllRegleMaintenance());
+      handleCloseModal();
+    } catch (error) {
+      console.error(
+        "Erreur création ou modification du regle de maintenance :",
+        error
+      );
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getAllCamions());
+    dispatch(getAllRemorques());
+    dispatch(getAllRegleMaintenance());
+    dispatch(getAllMaintenances());
+  }, [dispatch]);
 
   const getTypeBadge = (type) => {
     const badges = {
@@ -193,7 +261,10 @@ const GestionMaintenance = () => {
                     </thead>
                     <tbody>
                       {regles.map((regle) => (
-                        <tr key={regle._id} className="border-b hover:bg-gray-50">
+                        <tr
+                          key={regle._id}
+                          className="border-b hover:bg-gray-50"
+                        >
                           <td className="p-4">
                             <span
                               className={`text-xs font-bold px-3 py-1 rounded-full ${getTypeBadge(
@@ -390,6 +461,24 @@ const GestionMaintenance = () => {
             )}
           </div>
         </div>
+
+        {modalType === "maintenance" && (
+          <MaintenanceModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSave={handleSaveMaitenance}
+            selectedItem={selectedItem}
+          />
+        )}
+
+        {modalType === "regle" && (
+          <RegleMaintenanceModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            onSave={handleSaveRegleMaitenance}
+            selectedItem={selectedItem}
+          />
+        )}
       </main>
     </div>
   );

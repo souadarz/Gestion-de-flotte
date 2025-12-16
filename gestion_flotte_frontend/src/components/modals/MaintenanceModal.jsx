@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
-const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camions, remorques, regles }) => {
+const MaintenanceModal = ({ isOpen, onClose, onSave, selectedItem }) => {
+  const camions = useSelector((state) => state.camions.camions);
+  const remorques = useSelector((state) => state.remorques.remorques);
+  const regles = useSelector((state) => state.regleMaintenances.regles);
+  console.log(regles);
   const [formData, setFormData] = useState({
     vehiculeType: "",
     vehiculeId: "",
@@ -17,16 +22,16 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
   const [vehiculesDisponibles, setVehiculesDisponibles] = useState([]);
 
   useEffect(() => {
-    if (selectedMaintenance) {
+    if (selectedItem) {
       setFormData({
-        vehiculeType: selectedMaintenance.vehiculeType || "",
-        vehiculeId: selectedMaintenance.vehiculeId?._id || "",
-        regleMaintenanceId: selectedMaintenance.regleMaintenanceId?._id || "",
-        type: selectedMaintenance.type || "",
-        dateMaintenance: selectedMaintenance.dateMaintenance?.split("T")[0] || "",
-        kilometrageRealisation: selectedMaintenance.kilometrageRealisation || "",
-        cout: selectedMaintenance.cout || "",
-        description: selectedMaintenance.description || "",
+        vehiculeType: selectedItem.vehiculeType || "",
+        vehiculeId: selectedItem.vehiculeId?._id || "",
+        regleMaintenanceId: selectedItem.regleMaintenanceId?._id || "",
+        type: selectedItem.type || "",
+        dateMaintenance: selectedItem.dateMaintenance?.split("T")[0] || "",
+        kilometrageRealisation: selectedItem.kilometrageRealisation || "",
+        cout: selectedItem.cout || "",
+        description: selectedItem.description || "",
       });
     } else {
       setFormData({
@@ -41,7 +46,7 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
       });
     }
     setErrors({});
-  }, [selectedMaintenance, isOpen]);
+  }, [selectedItem, isOpen]);
 
   useEffect(() => {
     if (formData.vehiculeType === "camion") {
@@ -66,7 +71,7 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
     if (name === "vehiculeType") {
       setFormData((prev) => ({ ...prev, vehiculeId: "" }));
     }
-    
+
     if (name === "regleMaintenanceId") {
       const regleSelectionnee = regles?.find((r) => r._id === value);
       if (regleSelectionnee) {
@@ -137,7 +142,9 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
-            {selectedMaintenance ? "Modifier la Maintenance" : "Ajouter une Maintenance"}
+            {selectedItem
+              ? "Modifier la Maintenance"
+              : "Ajouter une Maintenance"}
           </h2>
           <button
             onClick={onClose}
@@ -174,7 +181,9 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
                   <option value="remorque">Remorque</option>
                 </select>
                 {errors.vehiculeType && (
-                  <p className="text-red-500 text-sm mt-1">{errors.vehiculeType}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.vehiculeType}
+                  </p>
                 )}
               </div>
 
@@ -195,12 +204,15 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
                   <option value="">Sélectionner un véhicule</option>
                   {vehiculesDisponibles.map((vehicule) => (
                     <option key={vehicule._id} value={vehicule._id}>
-                      {vehicule.immatriculation} - {vehicule.marque || vehicule.type}
+                      {vehicule.immatriculation} -{" "}
+                      {vehicule.marque || vehicule.type}
                     </option>
                   ))}
                 </select>
                 {errors.vehiculeId && (
-                  <p className="text-red-500 text-sm mt-1">{errors.vehiculeId}</p>
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.vehiculeId}
+                  </p>
                 )}
               </div>
             </div>
@@ -223,7 +235,9 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
                   value={formData.regleMaintenanceId}
                   onChange={handleChange}
                   className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-[#002D74] ${
-                    errors.regleMaintenanceId ? "border-red-500" : "border-gray-300"
+                    errors.regleMaintenanceId
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                 >
                   <option value="">Sélectionner une règle</option>
@@ -268,7 +282,9 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
                   value={formData.dateMaintenance}
                   onChange={handleChange}
                   className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-[#002D74] ${
-                    errors.dateMaintenance ? "border-red-500" : "border-gray-300"
+                    errors.dateMaintenance
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                 />
                 {errors.dateMaintenance && (
@@ -291,7 +307,9 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
                   min="0"
                   placeholder="Ex: 45000"
                   className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-[#002D74] ${
-                    errors.kilometrageRealisation ? "border-red-500" : "border-gray-300"
+                    errors.kilometrageRealisation
+                      ? "border-red-500"
+                      : "border-gray-300"
                   }`}
                 />
                 {errors.kilometrageRealisation && (
@@ -334,7 +352,9 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
                 }`}
               />
               {errors.description && (
-                <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description}
+                </p>
               )}
             </div>
           </div>
@@ -352,7 +372,7 @@ const MaintenanceModal = ({ isOpen, onClose, onSave, selectedMaintenance, camion
               type="submit"
               className="px-6 py-2 bg-[#002D74] text-white rounded-xl font-semibold hover:bg-[#206ab1] duration-300"
             >
-              {selectedMaintenance ? "Mettre à jour" : "Enregistrer"}
+              {selectedItem ? "Mettre à jour" : "Enregistrer"}
             </button>
           </div>
         </form>

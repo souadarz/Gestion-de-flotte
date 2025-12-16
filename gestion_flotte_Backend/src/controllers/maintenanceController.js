@@ -17,11 +17,12 @@ export const createMaintenance = async (req, res, next) => {
       description,
     } = req.body;
 
+    const vehiculeModel = vehiculeType === "camion" ? "Camion" : "Remorque";
     // Vérifier que le véhicule existe
     let vehicule;
     if (vehiculeType === "camion") {
       vehicule = await Camion.findById(vehiculeId);
-      if (!vehicule) {
+      if (!vehicule) { 
         const err = new Error("Camion non trouvé");
         err.statusCode = 404;
         throw err;
@@ -36,7 +37,7 @@ export const createMaintenance = async (req, res, next) => {
     }
 
     // Vérifier que la règle de maintenance existe
-    const regle = await Maintenance.findById(regleMaintenanceId);
+    const regle = await RegleMaintenance.findById(regleMaintenanceId);
     if (!regle) {
       const err = new Error("Règle de maintenance non trouvée");
       err.statusCode = 404;
@@ -46,6 +47,7 @@ export const createMaintenance = async (req, res, next) => {
     const maintenance = await Maintenance.create({
       vehiculeType,
       vehiculeId,
+      vehiculeModel,
       regleMaintenanceId,
       type,
       dateMaintenance,
