@@ -39,8 +39,8 @@ export const createRegleMaintenance = async (req, res, next) => {
   }
 };
 
-export const getAllRegleMaintenance = async(req, res, next)=>{
-    try {
+export const getAllRegleMaintenance = async (req, res, next) => {
+  try {
     const regles = await RegleMaintenance.find().sort({ createdAt: -1 });
 
     const totalItems = await RegleMaintenance.countDocuments();
@@ -83,6 +83,59 @@ export const getRegleMaintenanceById = async (req, res, next) => {
   }
 };
 
+// update regle maintenance
+export const updateRegleMaintenance = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const {
+      type,
+      periodiciteKm,
+      periodiciteMois,
+      description,
+      seuilAlerteKm,
+      seuilAlerteJours,
+    } = req.body;
+
+    const regleExistante = await RegleMaintenance.findById(id);
+    if (!regleExistante) {
+      const err = new Error("Règle de maintenance non trouvée");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    if (type && type !== regleExistante.type) {
+      const regleAvecMemeType = await RegleMaintenance.findOne({ type });
+      if (regleAvecMemeType) {
+        const err = new Error(
+          `Une règle de maintenance pour "${type}" existe déjà`
+        );
+        err.statusCode = 409;
+        throw err;
+      }
+    }
+
+    regleExistante.type = type ?? regleExistante.type;
+    regleExistante.periodiciteKm =
+      periodiciteKm ?? regleExistante.periodiciteKm;
+    regleExistante.periodiciteMois =
+      periodiciteMois ?? regleExistante.periodiciteMois;
+    regleExistante.description = description ?? regleExistante.description;
+    regleExistante.seuilAlerteKm =
+      seuilAlerteKm ?? regleExistante.seuilAlerteKm;
+    regleExistante.seuilAlerteJours =
+      seuilAlerteJours ?? regleExistante.seuilAlerteJours;
+
+    const regleUpdated = await regleExistante.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Règle de maintenance mise à jour avec succès",
+      data: regleUpdated,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const deleteRegleMaintenance = async (req, res, next) => {
   try {

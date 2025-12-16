@@ -16,7 +16,7 @@ router.use("/users", authenticate, roleMiddleware("admin"),chauffeurRoutes);
 router.use("/camions", authenticate, roleMiddleware("admin"), camionRoutes);
 router.use("/remorques", authenticate, roleMiddleware("admin"), remorqueRoutes);
 router.use("/trajets", authenticate, trajetRoutes);
-router.use("/maintenance", authenticate, roleMiddleware("admin"),  maintenanceRoutes);
-router.use("/regle-maintenance", authenticate, roleMiddleware("admin"), regleMaintenanceRoutes);
+router.use("/maintenances", authenticate, roleMiddleware("admin"),  maintenanceRoutes);
+router.use("/regle-maintenances", authenticate, roleMiddleware("admin"), regleMaintenanceRoutes);
 
 export default router;

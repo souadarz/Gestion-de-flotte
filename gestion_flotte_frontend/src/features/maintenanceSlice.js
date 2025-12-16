@@ -6,7 +6,7 @@ export const createMaintenance = createAsyncThunk(
   "maintenances/createMaintenance",
   async (body, { rejectWithValue }) => {
     try {
-      const res = await api.post("/maintenances", body);
+      const res = await api.post("/maintenances/", body);
       return res.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -19,7 +19,7 @@ export const getAllMaintenances = createAsyncThunk(
   "maintenances/getAllMaintenances",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get("/maintenances");
+      const res = await api.get("/maintenances/");
       const { metaData, data } = res.data;
       return { metaData, data };
     } catch (error) {
