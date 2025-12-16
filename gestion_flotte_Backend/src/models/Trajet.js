@@ -38,7 +38,7 @@ const TrajetSchema = new mongoose.Schema(
     statut: {
       type: String,
       enum: ["à_faire", "en_cours", "terminé"],
-    //   default: "à_faire",
+      default: "à faire",
     },
   },
   { timestamps: true }

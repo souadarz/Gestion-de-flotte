@@ -7,8 +7,10 @@ import Forbidden from "./pages/Forbidden.jsx";
 import GestionChauffeurs from "./pages/GestionChauffeurs.jsx";
 import GestionTrajets from "./pages/trajets/GestionTrajets.jsx";
 import TrajetDetails from "./pages/trajets/TrajetsDetails.jsx";
-import ChauffeurDashboard from "./pages/ChauffeurDashboard.jsx";
+import ChauffeurDashboard from "./pages/chauffeur/ChauffeurDashboard.jsx";
 import NotFound from "./pages/NotFound.jsx";
+import GestionMaintenance from "./pages/GestionMaintenance.jsx";
+import ChauffeurTrajets from "./pages/chauffeur/ChauffeurTrajets.jsx";
 
 function App() {
   return (
@@ -22,9 +24,11 @@ function App() {
           <Route path="/chauffeurs" element={<GestionChauffeurs />} />
           <Route path="/trajets" element={<GestionTrajets />} />
           <Route path="/trajet-details/:id" element={<TrajetDetails />} />
+          <Route path="/maintenance" element={<GestionMaintenance />} />
         </Route>
         <Route element={<ProtectedRoute roles={["chauffeur"]} />}>
-          <Route path="/chauffeurDashbord" element={<ChauffeurDashboard />} />
+          <Route path="/chauffeur/chauffeurDashbord" element={<ChauffeurDashboard />} />
+          <Route path="/chauffeur/MesTrajets" element={<ChauffeurTrajets />} />
         </Route>
         <Route path="/403" element={<Forbidden />} />
         <Route path="*" element={<NotFound />} />

@@ -1,7 +1,9 @@
 import React from "react";
 import {
+  FaChartBar,
   FaExclamationTriangle,
   FaRoute,
+  FaTachometerAlt,
   FaTruck,
   FaUsers,
 } from "react-icons/fa";
@@ -39,7 +41,7 @@ const Sidebar = () => {
                   to="/adminDashboard"
                   className="flex items-center p-3 rounded-lg bg-[#206ab1] font-semibold"
                 >
-                  <FaRoute className="mr-3" /> Tableau de Bord
+                  <FaChartBar className="mr-3" /> Tableau de Bord
                 </Link>
               </li>
               <li className="mb-2">
@@ -63,7 +65,36 @@ const Sidebar = () => {
                   to="/trajets"
                   className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
                 >
-                  <FaExclamationTriangle className="mr-3" /> Gestion des trajets
+                  <FaRoute className="mr-3" /> Gestion des trajets
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/maintenance"
+                  className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
+                >
+                  <FaExclamationTriangle className="mr-3" /> Gestion de
+                  maintenace
+                </Link>
+              </li>
+            </>
+          )}
+          {user?.role === "chauffeur" && (
+            <>
+              <li className="mb-2">
+                <Link
+                  to="/chauffeur/chauffeurDashbord"
+                  className="flex items-center p-3 rounded-lg bg-[#206ab1] font-semibold"
+                >
+                  <FaChartBar className="mr-3" /> Tableau de Bord
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/chauffeur/MesTrajets"
+                  className="flex items-center p-3 rounded-lg hover:bg-[#206ab1] transition-colors"
+                >
+                  <FaRoute className="mr-3" /> Mest trajets
                 </Link>
               </li>
             </>

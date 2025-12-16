@@ -53,35 +53,35 @@ export const createChauffeur = async (req, res, next) => {
 
 export const getAllChauffeurs = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query;
+    // const { page = 1, limit = 10, search = "" } = req.query;
 
-    //filtre de recherche
-    const filter = {
-      role: "chauffeur",
-      $or: [
-        { nom: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-      ],
-    };
+    // //filtre de recherche
+    // const filter = {
+    //   role: "chauffeur",
+    //   $or: [
+    //     { nom: { $regex: search, $options: "i" } },
+    //     { email: { $regex: search, $options: "i" } },
+    //   ],
+    // };
 
-    const skip = (page - 1) * limit;
+    // const skip = (page - 1) * limit;
 
-    const chauffeurs = await User.find(filter)
+    const chauffeurs = await User.find()
       .select("-motDePasse")
       .sort({ createdAt: -1 })
-      .limit(parseInt(limit))
-      .skip(skip);
+      // .limit(parseInt(limit))
+      // .skip(skip);
 
-    const totalItems = await User.countDocuments(filter);
+    const totalItems = await User.countDocuments();
 
     res.status(200).json({
       success: true,
       message: "chauffeurs récupérés avec succès",
       metaData: {
         totalItems,
-        currentPage: parseInt(page),
-        totalPages: Math.ceil(totalItems / limit),
-        count: chauffeurs.length,
+        // currentPage: parseInt(page),
+        // totalPages: Math.ceil(totalItems / limit),
+        // count: chauffeurs.length,
       },
       data: chauffeurs,
     });

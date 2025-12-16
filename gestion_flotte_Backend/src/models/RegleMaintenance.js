@@ -13,7 +13,7 @@ const RegleMaintenanceShema = new mongoose.Schema(
     seuilAlerteKm: {
       type: Number,
       required: function () {
-        return this.type === ("vidange" || "pneus");
+        return this.type === "vidange" || this.type === "pneus";
       },
     },
 

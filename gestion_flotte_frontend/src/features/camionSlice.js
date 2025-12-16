@@ -17,9 +17,9 @@ export const createCamion = createAsyncThunk(
 // get all camions
 export const getAllCamions = createAsyncThunk(
   "camions/getAllCamions",
-  async ({ page = 1, limit = 10 }, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const res = await api.get(`/camions?page=${page}&limit=${limit}`);
+      const res = await api.get("/camions");
       console.log(res.data);
       const { metaData, data } = res.data;
       return { metaData, data };
@@ -78,10 +78,7 @@ const camionSlice = createSlice({
     loading: false,
     loadingDetail: false,
     error: null,
-    currentPage: 1,
-    totalPages: 1,
     totalItems: 0,
-    limit: 10,
   },
 
   reducers: {},
@@ -110,10 +107,7 @@ const camionSlice = createSlice({
       .addCase(getAllCamions.fulfilled, (state, action) => {
         state.loading = false;
         state.camions = action.payload.data;
-        state.currentPage = action.payload.metaData.currentPage;
-        state.totalPages = action.payload.metaData.totalPages;
         state.totalItems = action.payload.metaData.totalItems;
-        state.limit = action.payload.metaData.limit;
       })
       .addCase(getAllCamions.rejected, (state, action) => {
         state.loading = false;

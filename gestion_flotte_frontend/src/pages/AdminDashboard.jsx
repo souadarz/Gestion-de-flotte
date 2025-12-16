@@ -25,12 +25,10 @@ const AdminDashboard = () => {
   const { totalItems: totalChauffeurs} = useSelector(
     (state) => state.chauffeurs
   );
-  // const { totalItems: totalTrajets} = useSelector(
-  //   (state) => state.trajets
-  // );
+ 
   //trajets en cours:
   const trajetsEnCours = useSelector((state)=>state.trajets.trajets.filter(trajet=>trajet.statut === "en_cours"));
-  console.log("en_cours",trajetsEnCours.length);
+  // console.log("en_cours",trajetsEnCours.length);
   useEffect(() => {
     dispatch(getAllCamions());
     dispatch(getAllChauffeurs());
