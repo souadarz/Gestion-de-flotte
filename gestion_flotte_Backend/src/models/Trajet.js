@@ -37,7 +37,7 @@ const TrajetSchema = new mongoose.Schema(
     remarque: { type: String },
     statut: {
       type: String,
-      enum: ["à_faire", "en_cours", "terminé"],
+      enum: ["à faire", "en_cours", "terminé"],
       default: "à faire",
     },
   },

@@ -20,7 +20,7 @@ export const getAllRegleMaintenance = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/regle-maintenances/");
-      console.log("reeeeeeeeeeegle", res.data);
+      // console.log("reeeeeeeeeeegle", res.data);
       const { metaData, data } = res.data;
       return { metaData, data };
     } catch (error) {
