@@ -7,7 +7,7 @@
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "seed": "node src/migrations/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha src/tests/unit/*.js",
     "test:auth": "cross-env mocha  --no-config src/tests/setup.js src/tests/unit/authTest.js --timeout 5000 --exit",
     "test:camion": "cross-env mocha  --no-config src/tests/setup.js src/tests/unit/camionTest.js --timeout 5000 --exit",
     "test:remorque": "cross-env mocha  --no-config src/tests/setup.js src/tests/unit/remorqueTest.js --timeout 5000 --exit",
