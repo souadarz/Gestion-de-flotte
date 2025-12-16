@@ -28,7 +28,7 @@ const ChauffeurTrajets = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const { user } = useAuth();
-  const { trajetsChauffeur, loading } = useSelector((state) => state.trajets);
+  const { trajetsChauffeur, loading , loadingDetail } = useSelector((state) => state.trajets);
 
   useEffect(() => {
     if (user?.id) {
@@ -49,8 +49,7 @@ const ChauffeurTrajets = () => {
   const handleSaveTrajet = async (trajetData) => {
     if (selectedTrajet?._id) {
       await dispatch(
-        updateTrajetChauffeur({ id: selectedTrajet._id, data: trajetData })
-      );
+        updateTrajetChauffeur({ id: selectedTrajet._id, data: trajetData })).unwrap();
       dispatch(getTrajetsChauffeur(user.id));
       handleCloseModal();
     }
@@ -68,10 +67,7 @@ const ChauffeurTrajets = () => {
       filtreStatut === "tous" || trajet.statut === filtreStatut;
     const matchSearch =
       trajet.lieuDepart.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      trajet.lieuArrivee.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      trajet.camionId?.immatriculation
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      trajet.lieuArrivee.toLowerCase().includes(searchTerm.toLowerCase());
 
     return matchStatut && matchSearch;
   });
@@ -82,7 +78,7 @@ const ChauffeurTrajets = () => {
         return "bg-green-100 text-green-700";
       case "en_cours":
         return "bg-blue-100 text-blue-700";
-      case "à_faire":
+      case "à faire":
         return "bg-amber-100 text-amber-700";
       default:
         return "bg-gray-100 text-gray-700";
@@ -95,14 +91,14 @@ const ChauffeurTrajets = () => {
         return "✓";
       case "en_cours":
         return "⟳";
-      case "à_faire":
+      case "à faire":
         return "○";
       default:
         return "?";
     }
   };
 
-  if (loading) {
+  if (loading || loadingDetail) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="text-center">
@@ -165,16 +161,16 @@ const ChauffeurTrajets = () => {
                   Tous ({trajetsChauffeur.length})
                 </button>
                 <button
-                  onClick={() => setFiltreStatut("à_faire")}
+                  onClick={() => setFiltreStatut("à faire")}
                   className={`px-4 py-2 rounded-xl font-semibold transition-all duration-300 ${
-                    filtreStatut === "à_faire"
+                    filtreStatut === "à faire"
                       ? "bg-amber-500 text-white"
                       : "bg-amber-100 text-amber-700 hover:bg-amber-200"
                   }`}
                 >
                   À faire (
                   {
-                    trajetsChauffeur.filter((t) => t.statut === "à_faire")
+                    trajetsChauffeur.filter((t) => t.statut === "à faire")
                       .length
                   }
                   )

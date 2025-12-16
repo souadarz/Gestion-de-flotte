@@ -46,7 +46,7 @@ const TrajetDetails = () => {
           <span
             className={`px-4 py-1 rounded-full text-sm font-bold
               ${
-                trajetDetail.statut === "à_faire"
+                trajetDetail.statut === "à faire"
                   ? "bg-yellow-100 text-yellow-700"
                   : trajetDetail.statut === "en_cours"
                   ? "bg-blue-100 text-blue-700"
@@ -59,16 +59,12 @@ const TrajetDetails = () => {
 
         {/* Chauffeur / Véhicules */}
         <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">
-            Chauffeur & véhicules
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">Chauffeur & véhicules</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <p className="text-sm text-gray-500">Chauffeur</p>
-              <p className="font-medium">
-                {trajetDetail.chauffeurId?.nom}
-              </p>
+              <p className="font-medium">{trajetDetail.chauffeurId?.nom}</p>
               <p className="text-sm text-gray-600">
                 {trajetDetail.chauffeurId?.email}
               </p>
@@ -80,8 +76,7 @@ const TrajetDetails = () => {
                 {trajetDetail.camionId?.immatriculation}
               </p>
               <p className="text-sm text-gray-600">
-                {trajetDetail.camionId?.marque}{" "}
-                {trajetDetail.camionId?.modele}
+                {trajetDetail.camionId?.marque} {trajetDetail.camionId?.modele}
               </p>
             </div>
 
@@ -99,9 +94,7 @@ const TrajetDetails = () => {
 
         {/* Lieux & dates */}
         <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">
-            Lieux & planification
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">Lieux & planification</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -128,30 +121,22 @@ const TrajetDetails = () => {
 
         {/* Données chauffeur */}
         <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
-          <h2 className="text-lg font-semibold mb-4">
-            Données de conduite
-          </h2>
+          <h2 className="text-lg font-semibold mb-4">Données de conduite</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
               <p className="text-sm text-gray-500">Km départ</p>
-              <p className="font-medium">
-                {trajetDetail.kmDepart ?? "-"}
-              </p>
+              <p className="font-medium">{trajetDetail.kmDepart ?? "-"}</p>
             </div>
 
             <div>
               <p className="text-sm text-gray-500">Km arrivée</p>
-              <p className="font-medium">
-                {trajetDetail.kmArrivee ?? "-"}
-              </p>
+              <p className="font-medium">{trajetDetail.kmArrivee ?? "-"}</p>
             </div>
 
             <div>
               <p className="text-sm text-gray-500">Volume gasoil</p>
-              <p className="font-medium">
-                {trajetDetail.volumeGasoil ?? "-"}
-              </p>
+              <p className="font-medium">{trajetDetail.volumeGasoil ?? "-"}</p>
             </div>
           </div>
         </div>

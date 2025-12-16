@@ -31,7 +31,7 @@ const ChauffeurDashboard = () => {
   const termines = trajetsChauffeur.filter(
     (t) => t.statut === "terminé"
   ).length;
-  const aFaire = trajetsChauffeur.filter((t) => t.statut === "à_faire").length;
+  const aFaire = trajetsChauffeur.filter((t) => t.statut === "à faire").length;
 
   // Calcul des statistiques
   const totalKm = trajetsChauffeur.reduce((sum, t) => {

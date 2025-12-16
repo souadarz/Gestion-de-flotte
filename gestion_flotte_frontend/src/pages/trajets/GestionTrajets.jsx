@@ -9,7 +9,7 @@ import {
   updateTrajet,
 } from "../../features/trajetSlice.js";
 import { useNavigate } from "react-router-dom";
-import TrajetAdminModal from "../../components/modals/TrajetAdminModal.jsx"
+import TrajetAdminModal from "../../components/modals/TrajetAdminModal.jsx";
 
 const GestionTrajets = () => {
   const navigate = useNavigate();
@@ -67,7 +67,8 @@ const GestionTrajets = () => {
   };
 
   if (loading) return <p className="p-6">Chargement...</p>;
-  if (error) return <p className="p-6 text-red-600">Erreur : {error.message}</p>;
+  if (error)
+    return <p className="p-6 text-red-600">Erreur : {error.message}</p>;
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -113,7 +114,7 @@ const GestionTrajets = () => {
               <tbody>
                 {trajets.map((trajet) => (
                   <tr key={trajet._id} className="border-b hover:bg-gray-50">
-                    <td className="p-4">{trajet.chauffeurId?.nom}</td>
+                    <td className="p-4">{trajet.chauffeurId?.email}</td>
                     <td className="p-4">{trajet.camionId?.immatriculation}</td>
                     <td className="p-4">
                       {trajet.remorqueId?.immatriculation}
@@ -128,7 +129,7 @@ const GestionTrajets = () => {
                     <td className="p-4">
                       <span
                         className={`px-3 py-1 text-xs font-bold rounded-full ${
-                          trajet.statut === "à_faire"
+                          trajet.statut === "à faire"
                             ? "bg-yellow-100 text-yellow-700"
                             : trajet.statut === "en_cours"
                             ? "bg-blue-100 text-blue-700"

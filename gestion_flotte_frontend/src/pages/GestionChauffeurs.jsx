@@ -73,7 +73,7 @@ const GestionChauffeurs = () => {
                   <th className="p-4 font-semibold">Email</th>
                   <th className="p-4 font-semibold">Rôle</th>
                   <th className="p-4 font-semibold">Créé le</th>
-                  <th className="p-4 font-semibold text-center">Actions</th>
+                  {/* <th className="p-4 font-semibold text-center">Actions</th> */}
                 </tr>
               </thead>
 
