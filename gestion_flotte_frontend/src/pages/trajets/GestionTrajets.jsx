@@ -6,11 +6,10 @@ import {
   createTrajet,
   getAllTrajets,
   deleteTrajet,
-  getTrajetById,
   updateTrajet,
 } from "../../features/trajetSlice.js";
 import { useNavigate } from "react-router-dom";
-import TrajetAdminModal from "../../components/TrajetAdminModal.jsx";
+import TrajetAdminModal from "../../components/modals/TrajetAdminModal.jsx"
 
 const GestionTrajets = () => {
   const navigate = useNavigate();

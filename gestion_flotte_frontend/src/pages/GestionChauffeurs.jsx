@@ -6,7 +6,7 @@ import {
   createChauffeur,
   getAllChauffeurs,
 } from "../features/chauffeurSlice.js";
-import ChauffeurModal from "../components/chauffeurModale.jsx";
+import ChauffeurModal from "../components/modals/chauffeurModale.jsx";
 
 const GestionChauffeurs = () => {
   const dispatch = useDispatch();
@@ -40,17 +40,6 @@ const GestionChauffeurs = () => {
       console.error("Erreur création chauffeur :", err);
     }
   };
-
-  // const handleDeleteChauffeur = async (id) => {
-  //   try {
-  //     if (window.confirm("Supprimer ce chauffeur ?")) {
-  //       await dispatch(deleteChauffeur(id)).unwrap();
-  //       dispatch(getAllChauffeurs({ page: currentPage, limit }));
-  //     }
-  //   } catch (err) {
-  //     console.error("Erreur suppression chauffeur :", err);
-  //   }
-  // };
 
   if (loading) return <p className="p-6">Chargement...</p>;
   if (error) return <p className="p-6 text-red-600">Erreur : {error}</p>;
@@ -102,12 +91,12 @@ const GestionChauffeurs = () => {
                       {new Date(chauffeur.createdAt).toLocaleDateString()}
                     </td>
                     <td className="p-4 flex justify-center gap-4">
-                      <button
+                      {/* <button
                         onClick={() => handleOpenModal(chauffeur)}
                         className="text-blue-600 hover:text-blue-800"
                       >
                         <FaEdit />
-                      </button>
+                      </button> */}
                       {/* <button
                         onClick={() => handleDeleteChauffeur(chauffeur._id)}
                         className="text-red-600 hover:text-red-800"

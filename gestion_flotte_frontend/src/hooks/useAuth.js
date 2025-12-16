@@ -1,16 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useEffect } from "react";
-import { login, logout, getUserConnected } from "../features/authSlice.js";
+import { login, logout, getUserConnected, setInitialized} from "../features/authSlice.js";
 
 const useAuth = () => {
   const dispatch = useDispatch();
-  const { user, isAuthenticated, loading, error, token, isInitialized } =
+  const { user, isAuthenticated, loading, error, token, isInitialized} =
     useSelector((state) => state.auth);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token && !isInitialized) {
       dispatch(getUserConnected());
+    }
+
+    if (!token && !isInitialized) {
+      dispatch(setInitialized());
     }
   }, [dispatch, isInitialized]);
 

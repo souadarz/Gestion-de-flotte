@@ -20,6 +20,7 @@ export const getAllTrajets = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const res = await api.get("/trajets");
+      console.log(res.data.data);
       return { metaData: res.data.metaData, data: res.data.data };
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
@@ -102,10 +103,7 @@ const trajetSlice = createSlice({
     loading: false,
     loadingDetail: false,
     error: null,
-    currentPage: 1,
-    totalPages: 1,
     totalItems: 0,
-    limit: 10,
   },
 
   reducers: {},
@@ -134,10 +132,10 @@ const trajetSlice = createSlice({
       .addCase(getAllTrajets.fulfilled, (state, action) => {
         state.loading = false;
         state.trajets = action.payload.data;
-        state.currentPage = action.payload.metaData.currentPage;
-        state.totalPages = action.payload.metaData.totalPages;
+        // state.currentPage = action.payload.metaData.currentPage;
+        // state.totalPages = action.payload.metaData.totalPages;
         state.totalItems = action.payload.metaData.totalItems;
-        state.limit = action.payload.metaData.limit || state.limit;
+        // state.limit = action.payload.metaData.limit || state.limit;
       })
       .addCase(getAllTrajets.rejected, (state, action) => {
         state.loading = false;

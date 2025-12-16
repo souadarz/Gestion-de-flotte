@@ -15,7 +15,7 @@ const Login = () => {
       if (role === "admin") {
         navigate("/adminDashboard", { replace: true });
       } else if (role === "chauffeur") {
-        navigate("/chauffeurDashbord", { replace: true });
+        navigate("/chauffeur/chauffeurDashbord", { replace: true });
       }
     }
   }, [isInitialized, isAuthenticated, user, navigate]);
@@ -35,7 +35,7 @@ const Login = () => {
       if (role === "admin") {
         navigate("/adminDashboard");
       } else if (role === "chauffeur") {
-        navigate("/chauffeurDashbord");
+        navigate("/chauffeur/chauffeurDashbord");
       }
     } else {
       console.error("Erreur de connexion :", loginError);

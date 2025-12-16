@@ -8,7 +8,7 @@ import {
   getAllCamions,
   updateCamion,
 } from "../features/camionSlice.js";
-import CamionModal from "../components/camionModale.jsx";
+import CamionModal from "../components/modals/camionModale.jsx";
 
 const GestionCamions = () => {
   const dispatch = useDispatch();
