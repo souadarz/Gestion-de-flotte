@@ -44,24 +44,16 @@ export const createCamion = async (req, res, next) => {
 //recuperation de tout les camions
 export const getAllCamions = async (req, res, next) => {
   try {
-    const { page = 1, pages, limit = 10 } = req.query;
 
-    const skip = (page - 1) * limit;
+    const camions = await Camion.find().sort({ createdAt: -1 });
 
-    const camions = await Camion.find()
-      .limit(parseInt(limit))
-      .skip(skip)
-      .sort({ createdAt: -1 });
-
-    const total = await Camion.countDocuments();
+    const totalItems = await Camion.countDocuments();
 
     res.status(200).json({
       success: true,
       message: "Camions récupérés avec succès",
       metaData: {
-        total,
-        page: parseInt(page),
-        pages: Math.ceil(total / limit),
+        totalItems,
         count: camions.length,
       },
       data: camions,

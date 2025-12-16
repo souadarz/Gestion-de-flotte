@@ -11,7 +11,7 @@ export const login = async (req, res, next) => {
       throw err;
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+motDePasse');
 
     if (!user || !(await user.comparePassword(motDePasse))) {
       const err = new Error("Email ou mot de passe incorrect");
@@ -46,21 +46,36 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const logout = async (req, res, next) => {
+export const getUserConnected = async (req, res, next) => {
   try {
-    const token = req.headers.authorization?.split(" ")[1];
+    const user = await User.findById(req.user.id);
 
-    if (!token) {
-      const err = new Error("Aucun token fourni");
-      statusCode = 401;
+    if (!user) {
+      const err = new Error("Utilisateur non trouvé");
+      err.statusCode = 404;
       throw err;
     }
 
-    res.status(200).json({ 
+    res.status(200).json({
       success: true,
-      message: "Déconnexion réussie"
+      data: {
+        id: user._id,
+        nom: user.nom,
+        email: user.email,
+        role: user.role,
+      },
     });
+  } catch (error) {
+    next(error);
+  }
+};
 
+export const logout = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Déconnexion réussie",
+    });
   } catch (error) {
     next(error);
   }

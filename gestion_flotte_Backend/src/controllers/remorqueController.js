@@ -33,24 +33,17 @@ export const createRemorque = async (req, res, next) => {
 //recuperation de tout les remorques
 export const getAllRemorques = async (req, res, next) => {
   try {
-    const { page = 1, pages, limit = 10 } = req.query;
-
-    const skip = (page - 1) * limit;
-
+  
     const remorques = await Remorque.find()
-      .limit(parseInt(limit))
-      .skip(skip)
       .sort({ createdAt: -1 });
 
-    const total = await Remorque.countDocuments();
+    const totalItems = await Remorque.countDocuments();
 
     res.status(200).json({
       success: true,
       message: "remorques récupérés avec succès",
       metaData: {
-        total,
-        page: parseInt(page),
-        pages: Math.ceil(total / limit),
+        totalItems,
         count: remorques.length,
       },
       data: remorques,
