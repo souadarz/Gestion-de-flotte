@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaTimes } from "react-icons/fa";
 
-const RegleMaintenanceModal = ({ isOpen, onClose, onSave, selectedRegle }) => {
+const RegleMaintenanceModal = ({ isOpen, onClose, onSave, selectedItem }) => {
   const [formData, setFormData] = useState({
     type: "",
     description: "",
@@ -14,14 +14,14 @@ const RegleMaintenanceModal = ({ isOpen, onClose, onSave, selectedRegle }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (selectedRegle) {
+    if (selectedItem) {
       setFormData({
-        type: selectedRegle.type || "",
-        description: selectedRegle.description || "",
-        periodiciteKm: selectedRegle.periodiciteKm || "",
-        periodiciteMois: selectedRegle.periodiciteMois || "",
-        seuilAlerteKm: selectedRegle.seuilAlerteKm || "",
-        seuilAlerteJours: selectedRegle.seuilAlerteJours || "",
+        type: selectedItem.type || "",
+        description: selectedItem.description || "",
+        periodiciteKm: selectedItem.periodiciteKm || "",
+        periodiciteMois: selectedItem.periodiciteMois || "",
+        seuilAlerteKm: selectedItem.seuilAlerteKm || "",
+        seuilAlerteJours: selectedItem.seuilAlerteJours || "",
       });
     } else {
       setFormData({
@@ -34,7 +34,7 @@ const RegleMaintenanceModal = ({ isOpen, onClose, onSave, selectedRegle }) => {
       });
     }
     setErrors({});
-  }, [selectedRegle, isOpen]);
+  }, [selectedItem, isOpen]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,7 +111,7 @@ const RegleMaintenanceModal = ({ isOpen, onClose, onSave, selectedRegle }) => {
       <div className="bg-white rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">
-            {selectedRegle ? "Modifier la Règle" : "Ajouter une Règle"}
+            {selectedItem ? "Modifier la Règle" : "Ajouter une Règle"}
           </h2>
           <button
             onClick={onClose}
@@ -283,7 +283,7 @@ const RegleMaintenanceModal = ({ isOpen, onClose, onSave, selectedRegle }) => {
               type="submit"
               className="px-6 py-2 bg-[#002D74] text-white rounded-xl font-semibold hover:bg-[#206ab1] duration-300"
             >
-              {selectedRegle ? "Mettre à jour" : "Créer"}
+              {selectedItem ? "Mettre à jour" : "Créer"}
             </button>
           </div>
         </form>

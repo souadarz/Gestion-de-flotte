@@ -134,8 +134,8 @@ const GestionMaintenance = () => {
 
   const handleSaveMaitenance = async (data) => {
     try {
-      if (selectedItem?.id) {
-        await dispatch(updateMaintenance({ id: selectedItem.id, data: data }));
+      if (selectedItem?._id) {
+        await dispatch(updateMaintenance({ id: selectedItem._id, data: data }));
       } else {
         await dispatch(createMaintenance(data));
       }
@@ -148,9 +148,9 @@ const GestionMaintenance = () => {
 
   const handleSaveRegleMaitenance = async (data) => {
     try {
-      if (selectedItem?.id) {
+      if (selectedItem?._id) {
         await dispatch(
-          updateRegleMaintenance({ id: selectedItem.id, data: data })
+          updateRegleMaintenance({ id: selectedItem._id, data: data })
         );
       } else {
         await dispatch(createRegleMaintenance(data));
