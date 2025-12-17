@@ -1,7 +1,7 @@
 import Camion from "../models/Camion.js";
 import Remorque from "../models/Remorque.js";
 import Maintenance from "../models/Maintenance.js";
-import RegleMaintenance from "../models/regleMaintenance.js";
+import RegleMaintenance from "../models/RegleMaintenance.js";
 
 //create maintenance
 export const createMaintenance = async (req, res, next) => {
@@ -22,7 +22,7 @@ export const createMaintenance = async (req, res, next) => {
     let vehicule;
     if (vehiculeType === "camion") {
       vehicule = await Camion.findById(vehiculeId);
-      if (!vehicule) { 
+      if (!vehicule) {
         const err = new Error("Camion non trouvé");
         err.statusCode = 404;
         throw err;
@@ -196,7 +196,6 @@ export const deleteMaintenance = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // Calculer la prochaine maintenance pour un véhicule
 export const calculerProchaineMaintenance = async (req, res, next) => {

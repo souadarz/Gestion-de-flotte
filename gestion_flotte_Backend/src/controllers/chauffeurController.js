@@ -65,6 +65,10 @@ export const getAllChauffeurs = async (req, res, next) => {
     // };
 
     // const skip = (page - 1) * limit;
+    // const filter = {
+    //   role : "chauffeur",
+    //   nom : { $regex : search, $option: "i"}
+    // }
 
     const chauffeurs = await User.find()
       .select("-motDePasse")

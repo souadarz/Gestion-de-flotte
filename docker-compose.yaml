@@ -1,0 +1,72 @@
+# Définition des services (conteneurs) de l'application
+services:
+  # Service MongoDB - Base de données
+  mongodb:
+
+    image: mongo:7
+    
+    container_name: mongodb_container
+    
+    volumes:
+      - mongodb_data:/data/db
+
+    networks:
+      - mern_network
+    
+    ports:
+      - "27017:27017"
+
+  # Service Backend - API Express.js
+  backend:
+
+    build:
+      context: ./gestion_flotte_Backend
+      dockerfile: Dockerfile
+    
+    container_name: backend_container
+    
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/gestion_flotte
+ 
+      PORT: 3000
+    
+    ports:
+      - "3000:3000"
+    
+    depends_on:
+      - mongodb
+    
+    networks:
+      - mern_network
+
+  # Service Frontend - React + Vite (serveur de développement)
+  frontend:
+    build:
+      context: ./gestion_flotte_frontend
+      dockerfile: Dockerfile
+    
+    container_name: frontend_container
+    
+    environment:
+      VITE_API_URL: http://localhost:3000/api
+    
+    ports:
+      - "5173:5173"
+    
+    depends_on:
+      - backend
+    
+    networks:
+      - mern_network
+    
+    volumes:
+      - ./gestion_flotte_frontend:/app
+      - /app/node_modules
+
+networks:
+  mern_network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

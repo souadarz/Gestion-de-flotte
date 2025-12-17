@@ -1,4 +1,4 @@
-import RegleMaintenance from "../models/regleMaintenance.js";
+import RegleMaintenance from "../models/RegleMaintenance.js";
 
 export const createRegleMaintenance = async (req, res, next) => {
   try {

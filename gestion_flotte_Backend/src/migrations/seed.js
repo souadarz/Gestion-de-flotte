@@ -10,15 +10,21 @@ try {
   console.log("Connected to database");
 
   const seedAdmin = async () => {
-
-    await User.create({
+    const userData = {
       nom: "Admin",
       email: "admin@gmail.com",
       motDePasse: "password",
       role: "admin",
-    });
+    };
+      console.log(`➡️ Vérification de l'utilisateur : ${userData.email}`);
+      const existingUser = await User.findOne({ email: userData.email });
+    if(!existingUser){
+      await User.create(userData);
 
-    console.log("admin ajouté");
+      console.log("admin ajouté");
+    }else{
+      console.log("user non créé");
+    }
   };
 
   seedAdmin()
